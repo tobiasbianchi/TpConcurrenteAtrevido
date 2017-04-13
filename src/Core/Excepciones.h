@@ -4,9 +4,9 @@
 class Error : public std::exception
 {
 private:
-	const string mensaje;
+	const std::string mensaje;
 public:
-	Error(const string prefijo, const string &mensaje) : mensaje(prefijo+mensaje)
+	Error(const std::string prefijo, const std::string &mensaje) : mensaje(prefijo+mensaje)
 	{
 	}
 
