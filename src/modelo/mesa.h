@@ -6,20 +6,23 @@
 #include <mutex.h>
 #include <vector>
 
+#include <iostream>
+
 #define RUTAARCHIVOMESA "archivos/mesa"
 
 class Mesa
 {
 private:
 	ObjetoCompartido<Maso> maso;
-	std::vector<ObjetoCompartido<Mutex>> moderadorTurnos;
+	std::vector<Mutex> moderadorTurnos;
 	unsigned int contador;
 
 public:
 	Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores) : contador(numeroPartida), maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA)
 	{
+		moderadorTurnos.reserve(cantidadJugadores);
 		for(unsigned char i = 0; i<cantidadJugadores; i++)
-			moderadorTurnos[i] = ObjetoCompartido<Mutex>(idRecurso(), RUTAARCHIVOMESA,idRecurso(), i != 0,RUTAARCHIVOMESA);	
+			moderadorTurnos.emplace_back(idRecurso(), i != 0, RUTAARCHIVOMESA);	
 	}
 
 	unsigned int idRecurso()
@@ -29,8 +32,9 @@ public:
 
 	bool hacerJugada(unsigned char numeroJugador, unsigned char carta)
 	{
-		moderadorTurnos.at(numeroJugador).invocar()->tomar();
-
+		std::cout << (int)numeroJugador << " voy a entrar" <<std::endl; 
+		moderadorTurnos.at(numeroJugador-1).tomar();
+		std::cout << (int)numeroJugador << " entre" <<std::endl; 
 		//Inicio de seccion critica
 
 		maso.invocar()->ponerCarta(carta);	
@@ -39,9 +43,15 @@ public:
 
 
 		if(numeroJugador < moderadorTurnos.size())
-			moderadorTurnos.at(numeroJugador+1).invocar()->liberar();
+		{
+			std::cout << (int)numeroJugador << " libere a " << (int)numeroJugador+1 << std::endl; 
+			moderadorTurnos.at(numeroJugador).liberar();
+		}
 		else
-			moderadorTurnos.at(0).invocar()->liberar();
+		{	
+			moderadorTurnos.at(0).liberar();
+			std::cout << (int)numeroJugador << " libere a " << 0 << std::endl; 
+		}
 
 		return true;
 	}

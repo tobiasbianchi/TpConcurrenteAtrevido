@@ -12,32 +12,34 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	unsigned char cantidadJugadores = atoi(argv[2]);
+	unsigned char cantidadJugadores = atoi(argv[1]);
 	bool esHijo = false;
 	int i;
 
-	for(i=0; i< cantidadJugadores && !esHijo; i++)
+	
+	if(fork() == 0)
 	{
-		esHijo = fork() == 0;
-	}
-
-	cout << "Voy a crear!" << endl;
-	Mesa mesa(1, cantidadJugadores);
-
-	if(esHijo)
-	{
-		cout << "Soy hijo!" << endl;
-		Jugador jugador(i,mesa);
-		jugador.jugar();
-	}
-	else
-	{
+		Mutex mutex1(1);
+		Mutex mutex2(2, true);
 		while(true)
 		{
-			sleep(1);
-			cout << "Soy padre! Voy a imprimir" << endl;
-			mesa.imprimir();
+			mutex1.tomar();
+			cout << 1 << endl;
+			mutex2.liberar();
+	
 		}
 	}	
+	else
+	{
+		Mutex mutex1(1);
+		Mutex mutex2(2, true);
+		while(true)
+		{
+			mutex2.tomar();
+			cout << 2 << endl;
+			mutex1.liberar();
+		}
+	}
+	
 	
 }
