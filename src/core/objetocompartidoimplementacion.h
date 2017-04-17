@@ -4,11 +4,11 @@
 #include <sys/shm.h>
  #include <string.h>
 
-template<typename T> template<typename ...Argumentos> ObjetoCompartido<T>::ObjetoCompartido(int idObjeto, Argumentos... args) : id(0), memoria(NULL)
+template<typename T> template<typename ...Argumentos> ObjetoCompartido<T>::ObjetoCompartido(int idObjeto, const char* rutaArchivo, Argumentos... args) : id(0), memoria(NULL)
 {
-	bool existia = estabaCreado(idObjeto);
+	bool existia = estabaCreado(idObjeto, rutaArchivo);
 
-	key_t clave = ftok("/bin/bash", idObjeto);
+	key_t clave = ftok(rutaArchivo, idObjeto);
 
 	if(clave == -1)
 		throw Error("Generacion de clave", strerror(errno));
@@ -29,9 +29,9 @@ template<typename T> template<typename ...Argumentos> ObjetoCompartido<T>::Objet
 		memoria = static_cast<T*>(memAux);
 }
 
-template<typename T> bool ObjetoCompartido<T>::estabaCreado(int idObjeto)
+template<typename T> bool ObjetoCompartido<T>::estabaCreado(int idObjeto, const char* rutaArchivo)
 {
-	key_t clave = ftok("/bin/bash", idObjeto);
+	key_t clave = ftok(rutaArchivo, idObjeto);
 
 	if(clave == -1)
 		throw Error("Generacion de clave", strerror(errno));
@@ -52,6 +52,7 @@ template<typename T> ObjetoCompartido<T>::~ObjetoCompartido()
 {
 	if(memoria)
 	{
+		//Agregar destruir objeto;
 		shmdt(memoria);
 		memoria = NULL;
 	}

@@ -18,7 +18,7 @@ private:
 	int id;
 public:
 
-	Semaforo(int idProyecto, int cantidadRecursos);
+	Semaforo(int idProyecto, int cantidadRecursos, const char* rutaArchivo = "/bin/bash");
 	void tomar();
 	void liberar();
 	~Semaforo();

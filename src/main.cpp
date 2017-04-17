@@ -1,34 +1,43 @@
-#include "core/semaforo.h"
-#include "core/objetocompartido.h"
+#include <semaforo.h>
+#include <objetocompartido.h>
 #include <thread>
 #include <iostream>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <maso.h>
+#include <jugador.h>
+#include <mesa.h>
 
 using namespace std;
 
-int main()
+int main(int argc, char** argv)
 {
-	ObjetoCompartido<Semaforo> obj1(1,4,1);
+	unsigned char cantidadJugadores = atoi(argv[2]);
+	bool esHijo = false;
+	int i;
 
-	for(int i=0; i<10;i++)
+	for(i=0; i< cantidadJugadores && !esHijo; i++)
 	{
-		if(fork()==0)
+		esHijo = fork() == 0;
+	}
+
+	cout << "Voy a crear!" << endl;
+	Mesa mesa(1, cantidadJugadores);
+
+	if(esHijo)
+	{
+		cout << "Soy hijo!" << endl;
+		Jugador jugador(i,mesa);
+		jugador.jugar();
+	}
+	else
+	{
+		while(true)
 		{
-			obj1.invocar()->tomar();
-			cout << "Proceso" << getpid() << ": Hola" << endl;
-			sleep(6);
-			obj1.invocar()->liberar();
-			cout << "Proceso" << getpid() << ": Termine" << endl;
-			return 0;
+			sleep(1);
+			cout << "Soy padre! Voy a imprimir" << endl;
+			mesa.imprimir();
 		}
-	}
-
-	for(int i=0;i<10;i++)
-	{
-		cout << "Esperando a " << i << endl;
-		wait(NULL);	
-	}
-	cout << "Soy el padre y termine" << endl;
-	return 0;
+	}	
+	
 }

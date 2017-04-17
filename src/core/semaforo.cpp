@@ -8,9 +8,9 @@
 #include <string.h>
 #include "definiciones.h"
 
-Semaforo::Semaforo(int idProyecto, int cantidadRecursos) : id(0)
+Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo) : id(0)
 {
-	key_t clave = ftok("/bin/bash", idProyecto);
+	key_t clave = ftok(rutaArchivo, idProyecto);
 
 	if(clave == -1)
 		throw Error("Generacion de clave", strerror(errno));
