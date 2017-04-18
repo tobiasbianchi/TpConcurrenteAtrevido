@@ -2,8 +2,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "excepciones.h"
-#include "Pipe.h"
+#include <excepciones.h>
+#include <pipe.h>
 
 Pipe::Pipe() {
 	this->escritura = true;
