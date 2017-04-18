@@ -17,10 +17,14 @@ public:
 	
 	void mostrarCartas()
 	{
+		mutex.tomar();
 		auto i = cartas.begin();
 
+		std::cout << "Maso:<" << std::endl;
 		while(i != cartas.end())
-			std::cout << *i++ << " ";
+			std::cout << (int)(*i++) << " ";
+		std::cout << ">" << std::endl;
+		mutex.liberar();
 	}
 };
 

@@ -2,7 +2,7 @@
 #include <vector>
 #include <mutex.h>
 
-Maso::Maso(int idProyecto, const char *rutaArchivo) : mutex(idProyecto, false, rutaArchivo)
+Maso::Maso(int idProyecto, const char *rutaArchivo) : mutex(idProyecto, rutaArchivo)
 {	
 }
 

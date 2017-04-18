@@ -1,12 +1,12 @@
-#include "semaforo.h"
+#include <semaforo.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-#include "excepciones.h"
+#include <excepciones.h>
 #include <errno.h>
 #include <string>
 #include <string.h>
-#include "definiciones.h"
+#include <definiciones.h>
 
 Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo) : id(0)
 {
@@ -50,6 +50,11 @@ void Semaforo::liberar()
 	if(semop(id, &operacion, 1) == -1)
 		throw Error("Liberacion del semaforo", strerror(errno));
 };
+
+int Semaforo::obtenerValor()
+{
+	 return(semctl(id, 0, GETVAL, 0));
+}
 
 Semaforo::~Semaforo()
 {

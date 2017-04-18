@@ -21,6 +21,7 @@ public:
 	Semaforo(int idProyecto, int cantidadRecursos, const char* rutaArchivo = "/bin/bash");
 	void tomar();
 	void liberar();
+	int obtenerValor();
 	~Semaforo();
 };
 
