@@ -9,15 +9,16 @@ Maso::Maso(int idProyecto, const char *rutaArchivo) : mutex(idProyecto, rutaArch
 void Maso::ponerCarta(unsigned char carta)
 {
 	mutex.tomar();
-	cartas.push_back(carta);
+
+	cartas.ponerCarta(carta);
+
 	mutex.liberar();
 }
 
 unsigned char Maso::sacarCarta()
 {
 	mutex.tomar();
-	unsigned char cartaAux = cartas.back();
-	cartas.pop_back();
+	unsigned char cartaAux = cartas.sacarCarta();
 	mutex.liberar();
 	return cartaAux;
 }

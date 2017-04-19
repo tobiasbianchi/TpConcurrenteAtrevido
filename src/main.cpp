@@ -3,8 +3,9 @@
 #include <sys/wait.h>
 #include <vector>
 
-#include <jugador.h>
 #include <mesa.h>
+#include <maso.h>
+#include <jugador.h>
 
 
 using namespace std;
@@ -13,7 +14,7 @@ int main(int argc, char** argv)
 {
 	unsigned char cantidadJugadores = 5;
 	bool esHijo = false;
-	int i;
+	int i=0;
 
 	Mesa mesa(1, cantidadJugadores);
 	
@@ -23,11 +24,16 @@ int main(int argc, char** argv)
 	if(esHijo)
 	{
 		Jugador yo(i, mesa);
-		yo.jugar();
+		while(true)		
+		{
+			yo.jugar();
+		}
 	}
 	else
 		while(true)
 		{
-			sleep(3);
+			system("clear");
+			mesa.imprimir();
+			sleep(1);
 		}
 }

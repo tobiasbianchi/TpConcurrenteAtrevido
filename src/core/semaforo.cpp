@@ -8,6 +8,8 @@
 #include <string.h>
 #include <definiciones.h>
 
+#include <iostream>
+
 Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo) : id(0)
 {
 	key_t clave = ftok(rutaArchivo, idProyecto);
@@ -59,5 +61,8 @@ int Semaforo::obtenerValor()
 Semaforo::~Semaforo()
 {
 	if(id)	
+	{
 		semctl(id, 0, IPC_RMID);
+		id = 0;
+	}
 }

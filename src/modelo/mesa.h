@@ -18,6 +18,7 @@ private:
 public:
 	Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores) : contador(numeroPartida), maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA)
 	{
+		//Como no se pueden copiar semaforos hay que reservar la memoria exacta antes o usar otra estructura contenedora.
 		moderadorTurnos.reserve(cantidadJugadores);
 		for(unsigned char i = 0; i<cantidadJugadores; i++)
 			moderadorTurnos.emplace_back(idRecurso(), (i!=0) ? (0) : (1), RUTAARCHIVOMESA);	
