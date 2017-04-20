@@ -21,7 +21,6 @@ public:
 	Semaforo(int idProyecto, int cantidadRecursos, const char* rutaArchivo = "/bin/bash");
 
 	//No se puden copiar semaforos.
-	Semaforo(const Semaforo &) = delete;
 	Semaforo &operator=(const Semaforo &) = delete;
 
 	void tomar();

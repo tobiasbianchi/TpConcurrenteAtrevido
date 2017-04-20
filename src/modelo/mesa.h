@@ -14,43 +14,15 @@ private:
 	ObjetoCompartido<Maso> maso;
 	std::vector<Semaforo> moderadorTurnos;
 	unsigned int contador;
+	ObjetoCompartido<unsigned char> turnoJugador;
 
 public:
-	Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores) : contador(numeroPartida), maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA)
-	{
-		//Como no se pueden copiar semaforos hay que reservar la memoria exacta antes o usar otra estructura contenedora.
-		moderadorTurnos.reserve(cantidadJugadores);
-		for(unsigned char i = 0; i<cantidadJugadores; i++)
-			moderadorTurnos.emplace_back(idRecurso(), (i!=0) ? (0) : (1), RUTAARCHIVOMESA);	
-	}
-
-	unsigned int idRecurso()
-	{
-		return contador++;
-	}
-
-	bool hacerJugada(unsigned char numeroJugador, unsigned char carta)
-	{
-		moderadorTurnos.at(numeroJugador-1).tomar();
-		//Inicio de seccion critica
-
-		maso.invocar()->ponerCarta(carta);	
-
-		//Fin de seccion critica
-
-
-		if(numeroJugador < moderadorTurnos.size())
-			moderadorTurnos.at(numeroJugador).liberar();
-		else
-			moderadorTurnos.at(0).liberar();
-
-		return true;
-	}
-
-	void imprimir()
-	{
-		maso.invocar()->mostrarCartas();		
-	}
+	Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores);
+	unsigned int idRecurso();
+	bool pedirTurno(unsigned char numeroJugador);
+	bool hacerJugada(unsigned char carta);
+	bool pasarTurno();
+	void imprimir();
 };
 
 #endif

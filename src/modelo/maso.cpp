@@ -22,3 +22,13 @@ unsigned char Maso::sacarCarta()
 	mutex.liberar();
 	return cartaAux;
 }
+
+void Maso::mostrarCartas()
+{
+	mutex.tomar();
+
+	for(int i=0;i<cartas.cantidadCartas;i++)
+		std::cout << (int)cartas.cartas[i] << std::endl;
+	
+	mutex.liberar();
+}

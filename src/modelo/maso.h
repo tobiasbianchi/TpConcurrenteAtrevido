@@ -45,16 +45,7 @@ public:
 	Maso(int idProyecto, const char *rutaArchivo = "/bin/bash");
 	void ponerCarta(unsigned char carta);
 	unsigned char sacarCarta();
-	
-	void mostrarCartas()
-	{
-		mutex.tomar();
-
-		for(int i=0;i<cartas.cantidadCartas;i++)
-			std::cout << (int)cartas.cartas[i] << std::endl;
-		
-		mutex.liberar();
-	}
+	void mostrarCartas();
 };
 
 
