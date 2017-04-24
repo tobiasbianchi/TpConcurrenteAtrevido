@@ -23,6 +23,11 @@ public:
 	bool hacerJugada(unsigned char carta);
 	bool pasarTurno();
 	void imprimir();
+	~Mesa(){
+		while (moderadorTurnos.size() != 0){
+			moderadorTurnos.pop_back();
+		}
+	}
 };
 
 #endif

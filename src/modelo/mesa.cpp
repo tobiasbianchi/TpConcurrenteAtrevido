@@ -1,4 +1,7 @@
 #include <mesa.h>
+#include <signal.h>
+#include <HandlerSenial.h>
+#include <iostream>
 
 
 Mesa::Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores) : contador(numeroPartida), maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA), turnoJugador(idRecurso(), RUTAARCHIVOMESA)
@@ -16,13 +19,25 @@ unsigned int Mesa::idRecurso()
 
 bool Mesa::pedirTurno(unsigned char numeroJugador)
 {
+	std::cout << "pidiendo turno" << std::endl;
 	moderadorTurnos.at(numeroJugador-1).tomar();
+	std::cout << "turno dado" << std::endl;
 	*(turnoJugador.invocar()) = numeroJugador;
 }
 
 bool Mesa::hacerJugada(unsigned char carta)
 {
-	maso.invocar()->ponerCarta(carta);	
+	maso.invocar()->ponerCarta(carta);
+	if ((int)carta == 7){
+		HandlerSenial::getInstancia()->broadcastSignal(SIGCHLD);
+	} else if ((int)carta == 10){
+		HandlerSenial::getInstancia()->broadcastSignal(SIGUSR1);
+	} else if ((int)carta == 11) {
+        HandlerSenial::getInstancia()->broadcastSignal(SIGTTOU);
+    } else if ((int)carta == 12) {
+        HandlerSenial::getInstancia()->broadcastSignal(SIGTTIN);
+    }
+
 	return true;
 }
 
