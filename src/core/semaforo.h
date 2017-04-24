@@ -25,6 +25,7 @@ public:
 
 	void tomar();
 	void liberar();
+	void esperarACero();
 	int obtenerValor();
 	~Semaforo();
 };

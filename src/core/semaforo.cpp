@@ -53,6 +53,18 @@ void Semaforo::liberar()
 		throw Error("Liberacion del semaforo", strerror(errno));
 };
 
+void Semaforo::esperarACero()
+{
+	struct sembuf operacion;
+
+	operacion.sem_num = 0;
+	operacion.sem_flg = 0;
+	operacion.sem_op = 0;
+
+	if(semop(id, &operacion, 1) == -1)
+		throw Error("Esperar a cero semaforo", strerror(errno));
+};
+
 int Semaforo::obtenerValor()
 {
 	 return(semctl(id, 0, GETVAL, 0));
