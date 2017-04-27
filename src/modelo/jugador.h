@@ -35,7 +35,6 @@ public:
 	Jugador(unsigned char numeroJugador, Mesa &mesa, Semaforo &inicio);
 	void pensar();
 	void jugar();
-
 	static const std::string ATREVIDO;
 	static const std::string BUENOSDIAS;
 	static const std::string BUENASNOCHES;

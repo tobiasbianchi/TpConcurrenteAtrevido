@@ -20,9 +20,7 @@ unsigned int Mesa::idRecurso()
 
 bool Mesa::pedirTurno(unsigned char numeroJugador)
 {
-	std::cout << "pidiendo turno" << std::endl;
 	moderadorTurnos.at(numeroJugador-1).tomar();
-	std::cout << "turno dado" << std::endl;
 	*(turnoJugador.invocar()) = numeroJugador;
 }
 
