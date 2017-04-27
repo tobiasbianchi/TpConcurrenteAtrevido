@@ -2,6 +2,7 @@
 #include <signal.h>
 #include <HandlerSenial.h>
 #include <iostream>
+#include "mesa.h"
 
 
 Mesa::Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores) : contador(numeroPartida), maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA), turnoJugador(idRecurso(), RUTAARCHIVOMESA)
@@ -27,16 +28,26 @@ bool Mesa::pedirTurno(unsigned char numeroJugador)
 
 bool Mesa::hacerJugada(unsigned char carta)
 {
-	maso.invocar()->ponerCarta(carta);
-	if ((int)carta == 7){
-		HandlerSenial::getInstancia()->broadcastSignal(SIGCHLD);
-	} else if ((int)carta == 10){
-		HandlerSenial::getInstancia()->broadcastSignal(SIGUSR1);
-	} else if ((int)carta == 11) {
-        HandlerSenial::getInstancia()->broadcastSignal(SIGTTOU);
-    } else if ((int)carta == 12) {
-        HandlerSenial::getInstancia()->broadcastSignal(SIGTTIN);
-    }
+	bool repitioUltima = maso.invocar()->ponerCarta(carta);
+	switch (carta){
+		case 10:
+			HandlerSenial::getInstancia()->broadcastSignal(SIGUSR1);
+			break;
+		case 11:
+			HandlerSenial::getInstancia()->broadcastSignal(SIGTTIN);
+			break;
+		case 12:
+			HandlerSenial::getInstancia()->broadcastSignal(SIGUSR2);
+			break;
+		case 7:
+			HandlerSenial::getInstancia()->broadcastSignal(SIGCHLD);
+			HandlerSenial::getInstancia()->broadcastSignal(SIGTTOU);
+			break;
+	}
+
+	if (repitioUltima && carta != 7){
+		HandlerSenial::getInstancia()->broadcastSignal(SIGTTOU);
+	}
 
 	return true;
 }
@@ -54,4 +65,12 @@ bool Mesa::pasarTurno()
 void Mesa::imprimir()
 {
 	maso.invocar()->mostrarCartas();		
+}
+
+bool Mesa::ponerMano() {
+	return maso.invocar()->ponerMano(moderadorTurnos.size());
+}
+
+std::vector<unsigned char> Mesa::robarCartas(){
+	return maso.invocar()->robarMaso();
 }

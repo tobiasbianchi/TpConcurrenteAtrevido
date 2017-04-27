@@ -23,6 +23,8 @@ public:
 	bool hacerJugada(unsigned char carta);
 	bool pasarTurno();
 	void imprimir();
+	bool ponerMano();
+	std::vector<unsigned char> robarCartas();
 	~Mesa(){
 		while (moderadorTurnos.size() != 0){
 			moderadorTurnos.pop_back();
