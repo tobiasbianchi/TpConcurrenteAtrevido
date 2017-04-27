@@ -9,7 +9,7 @@ Mesa::Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores) : conta
 	//Como no se pueden copiar semaforos hay que reservar la memoria exacta antes o usar otra estructura contenedora.
 	moderadorTurnos.reserve(cantidadJugadores);
 	for(unsigned char i = 0; i<cantidadJugadores; i++)
-		moderadorTurnos.emplace_back(idRecurso(), (i!=0) ? (0) : (1), RUTAARCHIVOMESA);	
+		moderadorTurnos.emplace_back(idRecurso(), (i!=0) ? (0) : (1), RUTAARCHIVOMESA);
 }
 
 unsigned int Mesa::idRecurso()

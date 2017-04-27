@@ -37,15 +37,24 @@ private:
 			return 0;
 		}
 
+		unsigned char ultimaCarta(){
+			if (cantidadCartas > 0){
+				return cartas[cantidadCartas - 1];
+			}
+			return 0;
+		}
 	};
 
 	struct arregloCartas cartas;
 	Mutex mutex;
+	int manosApoyadas = 0;
 public:
 	Maso(int idProyecto, const char *rutaArchivo = "/bin/bash");
-	void ponerCarta(unsigned char carta);
+	bool ponerCarta(unsigned char carta);
 	unsigned char sacarCarta();
 	void mostrarCartas();
+	bool ponerMano( int cantidadJugadores);
+	std::vector<unsigned char> robarMaso();
 };
 
 
