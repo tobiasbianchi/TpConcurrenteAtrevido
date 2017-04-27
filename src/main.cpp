@@ -5,11 +5,11 @@
 
 #include <mesa.h>
 #include <maso.h>
-#include <jugador.h>
 #include "core/semaforo.h"
 #include "core/HandlerSenial.h"
 #include "handlers/SIGINT_Handler.h"
 #include "excepciones.h"
+#include "modelo/jugador.h"
 
 
 using namespace std;
@@ -36,16 +36,19 @@ int main(int argc, char** argv)
 		exit(0);
 	}
 
-	HandlerSenial::bloquearSenial(SIGCHLD);
-	HandlerSenial::bloquearSenial(SIGTTIN);
-	HandlerSenial::bloquearSenial(SIGUSR1);
-	HandlerSenial::bloquearSenial(SIGUSR2);
+	HandlerSenial::bloquearSenial(HandlerSenial::SIGNAL_10);
+	HandlerSenial::bloquearSenial(HandlerSenial::SIGNAL_11);
+	HandlerSenial::bloquearSenial(HandlerSenial::SIGNAL_12);
+	HandlerSenial::bloquearSenial(HandlerSenial::SIG_MANO);
+	HandlerSenial::bloquearSenial(HandlerSenial::SIGATREVIDO);
+
     SIGINT_Handler handler;
+
     HandlerSenial::getInstancia()->registrarHandler(SIGINT,&handler);
 	esperarATodosInicializados.tomar();
 	esperarATodosInicializados.esperarACero();
 
-	while(handler.getGracefulQuit() != 1)
+	while(handler.getWasCalled() != 1)
 	{
 		//system("clear");
 		std::cout<< "nuevo impresion" << std::endl;

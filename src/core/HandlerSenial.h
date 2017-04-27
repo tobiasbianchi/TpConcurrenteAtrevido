@@ -17,6 +17,12 @@ class HandlerSenial {
 		static void dispatcher ( int signum );
 
 	public:
+		static const int SIGNAL_10 = SIGUSR1;
+		static const int SIGNAL_11 = SIGUSR2;
+		static const int SIGNAL_12  = SIGTTIN;
+		static const int SIGATREVIDO = SIGTTOU;
+		static const int SIG_MANO = SIGCHLD;
+
 		static HandlerSenial* getInstancia();
 		static void destruir ();
 		HandlerEvento* registrarHandler ( int signum,HandlerEvento* eh );

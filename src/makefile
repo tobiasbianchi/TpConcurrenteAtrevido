@@ -5,4 +5,4 @@ INCLUDES = -I core -I handlers -I modelo
 DEBUG = -g
 
 make:
-	$(CC) $(CFLAGS) $(ESTANDAR) $(INCLUDES) $(DEBUG) -o TP *.* core/*.cpp handlers/*.cpp modelo/*.cpp 
+	$(CC) $(CFLAGS) $(ESTANDAR) $(INCLUDES) $(DEBUG) -o TP *.* core/*.cpp modelo/*.cpp 
