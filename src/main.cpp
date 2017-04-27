@@ -21,16 +21,16 @@ int main(int argc, char** argv)
 	int i=0;
 
 	Semaforo esperarATodosInicializados(10,cantidadJugadores + 1);
+	Semaforo esperarFinTurno(11,0);
 	Mesa mesa(1, cantidadJugadores);
-
+	//creo 7 semaforos, 5 por jugadores, 1 por barrera y 1 por mutex del maso.
 
 	for(i = 0;i<cantidadJugadores && !esHijo;i++)
-		esHijo = fork() == 0;	
+		esHijo = fork() == 0;
 
 	if(esHijo)
 	{
-		std::cout << "something" << std::endl;
-		Jugador yo(i, mesa, esperarATodosInicializados);
+		Jugador yo(i, mesa, esperarATodosInicializados, esperarFinTurno);
 		yo.jugar();
 		std::cout << "Jugador " << i << "saliendo" <<std::endl;
 		exit(0);
@@ -51,8 +51,7 @@ int main(int argc, char** argv)
 	while(handler.getWasCalled() != 1)
 	{
 		//system("clear");
-		std::cout<< "nuevo impresion" << std::endl;
-		mesa.imprimir();
+		//mesa.imprimir();
 		sleep(1);
 	}
 

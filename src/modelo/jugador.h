@@ -11,6 +11,10 @@
 #include "../core/semaforo.h"
 #include "../handlers/SIGINT_Handler.h"
 #include "../handlers/PonerManoHandler.h"
+#include "../handlers/SieteHandler.h"
+#include "../handlers/DoceHandler.h"
+#include "../handlers/OnceHandler.h"
+#include "../handlers/DiezHandler.h"
 
 #define MAXIMOTIEMPOTURNO 2
 
@@ -30,9 +34,10 @@ private:
 	Maso maso;
 	Mesa &mesa;
     Semaforo &inicio;
+	Semaforo &turnoTermino;
 	void decir(std::string mensaje);
 public:
-	Jugador(unsigned char numeroJugador, Mesa &mesa, Semaforo &inicio);
+	Jugador(unsigned char numeroJugador, Mesa &mesa, Semaforo &inicio, Semaforo &turnoTermino);
 	void pensar();
 	void jugar();
 	static const std::string ATREVIDO;
