@@ -2,6 +2,7 @@
 #define MUTEX
 
 #include <semaforo.h>
+#include "semaforo.h"
 
 class Mutex : public Semaforo
 {

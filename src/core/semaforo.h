@@ -27,7 +27,7 @@ public:
 	void liberar();
 	void esperarACero();
 	int obtenerValor();
-	~Semaforo();
+	virtual ~Semaforo();
 };
 
 #endif

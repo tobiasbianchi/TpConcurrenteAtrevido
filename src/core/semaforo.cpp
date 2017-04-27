@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo) : id(0)
+Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo) : id(-1)
 {
 	key_t clave = ftok(rutaArchivo, idProyecto);
 
@@ -22,6 +22,7 @@ Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo
 	if(id == -1)
 		throw Error("Creacion del semaforo", strerror(errno));
 
+	std::cout << "Created semaphore " << id << std::endl;
 	union semun sem;
 	sem.val = cantidadRecursos;
 
@@ -72,9 +73,11 @@ int Semaforo::obtenerValor()
 
 Semaforo::~Semaforo()
 {
-	if(id)	
+
+	if(id != -1)
 	{
 		semctl(id, 0, IPC_RMID);
-		id = 0;
+		std::cout << "deleting semaforo id: " << id <<std::endl;
+		id = -1;
 	}
 }
