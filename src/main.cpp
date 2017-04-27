@@ -22,33 +22,26 @@ int main(int argc, char** argv)
 
 	Semaforo esperarATodosInicializados(10,cantidadJugadores + 1);
 	Mesa mesa(1, cantidadJugadores);
-	SIGINT_Handler handler;
-	HandlerSenial::getInstancia()->registrarHandler(SIGINT,&handler);
+
+
 	for(i = 0;i<cantidadJugadores && !esHijo;i++)
 		esHijo = fork() == 0;	
 
 	if(esHijo)
 	{
 		std::cout << "something" << std::endl;
-		Jugador yo(i, mesa);
-		esperarATodosInicializados.tomar();
-		esperarATodosInicializados.esperarACero();
-		while(handler.getGracefulQuit() != 1)
-		{
-			try {
-				yo.jugar();
-			}catch (Error e){
-				std::cout << i << e.what() << std::endl;
-			}
-		}
+		Jugador yo(i, mesa, esperarATodosInicializados);
+		yo.jugar();
 		std::cout << "Jugador " << i << "saliendo" <<std::endl;
 		exit(0);
 	}
+
 	HandlerSenial::bloquearSenial(SIGCHLD);
 	HandlerSenial::bloquearSenial(SIGTTIN);
 	HandlerSenial::bloquearSenial(SIGUSR1);
 	HandlerSenial::bloquearSenial(SIGUSR2);
-
+    SIGINT_Handler handler;
+    HandlerSenial::getInstancia()->registrarHandler(SIGINT,&handler);
 	esperarATodosInicializados.tomar();
 	esperarATodosInicializados.esperarACero();
 

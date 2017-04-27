@@ -8,6 +8,8 @@
 #include "OnceHandler.h"
 #include "DoceHandler.h"
 #include "SieteHandler.h"
+#include "../core/semaforo.h"
+#include "../handlers/SIGINT_Handler.h"
 
 #define MAXIMOTIEMPOTURNO 2
 
@@ -21,10 +23,12 @@ private:
 	OnceHandler onceHandler;
 	DoceHandler doceHandler;
 	SieteHandler sieteHandler;
+    SIGINT_Handler quitHandler;
 	Maso maso;
 	Mesa &mesa;
+    Semaforo &inicio;
 public:
-	Jugador(unsigned char numeroJugador, Mesa &mesa);
+	Jugador(unsigned char numeroJugador, Mesa &mesa, Semaforo &inicio);
 	void pensar();
 	void jugar();
 };
