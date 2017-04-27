@@ -5,9 +5,11 @@
 #ifndef TPCONCURRENTEATREVIDO_ONCEHANLDER_H
 #define TPCONCURRENTEATREVIDO_ONCEHANLDER_H
 
-#include <HandlerEvento.h>
+#include "BasicHandler.h"
+#include "../core/HandlerSenial.h"
 
-class OnceHandler : public HandlerEvento{
-    int handleSenial(int signum);
+class OnceHandler : public BasicHandler{
+public:
+    OnceHandler() : BasicHandler(HandlerSenial::SIGNAL_11) {}
 };
 #endif //TPCONCURRENTEATREVIDO_ONCEHANLDER_H

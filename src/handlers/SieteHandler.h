@@ -5,10 +5,13 @@
 #ifndef TPCONCURRENTEATREVIDO_SIETEHANDLER_H
 #define TPCONCURRENTEATREVIDO_SIETEHANDLER_H
 
-#include <HandlerEvento.h>
+#include "BasicHandler.h"
+#include "../core/HandlerSenial.h"
 
-class SieteHandler : public HandlerEvento
+class SieteHandler : public BasicHandler
 {
-    int handleSenial(int signum);
+public:
+    SieteHandler() : BasicHandler(HandlerSenial::SIGATREVIDO) {}
+
 };
 #endif //TPCONCURRENTEATREVIDO_SIETEHANDLER_H

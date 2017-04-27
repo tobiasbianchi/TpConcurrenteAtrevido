@@ -5,9 +5,11 @@
 #ifndef TPCONCURRENTEATREVIDO_10HANDLER_H
 #define TPCONCURRENTEATREVIDO_10HANDLER_H
 
-#include <HandlerEvento.h>
+#include "BasicHandler.h"
+#include "../core/HandlerSenial.h"
 
-class DiezHandler : public HandlerEvento {
-    int handleSenial(int signum);
+class DiezHandler : public BasicHandler {
+public:
+    DiezHandler() : BasicHandler(HandlerSenial::SIGNAL_10) {}
 };
 #endif //TPCONCURRENTEATREVIDO_10HANDLER_H

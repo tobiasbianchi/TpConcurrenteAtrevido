@@ -4,31 +4,11 @@
 #include <signal.h>
 #include <assert.h>
 
-#include "HandlerEvento.h"
+#include "BasicHandler.h"
 
-class SIGINT_Handler : public HandlerEvento {
-
-	private:
-		sig_atomic_t gracefulQuit;
-
-	public:
-
-		SIGINT_Handler () : gracefulQuit(0) {
-		}
-
-		~SIGINT_Handler () {
-		}
-
-		virtual int handleSenial ( int signum ) {
-			assert ( signum == SIGINT );
-			this->gracefulQuit = 1;
-			return 0;
-		}
-
-		sig_atomic_t getGracefulQuit () const {
-			return this->gracefulQuit;
-		}
-
+class SIGINT_Handler : public BasicHandler {
+public:
+	SIGINT_Handler() : BasicHandler(SIGINT) {}
 };
 
 #endif /* SIGINT_HANDLER_H_ */
