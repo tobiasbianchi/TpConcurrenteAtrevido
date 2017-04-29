@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 
 	if(esHijo)
 	{
-		Jugador yo(i, mesa, masosRepartidos[i]);
+		Jugador yo(i, mesa, masosRepartidos[i - 1]);
 		yo.jugar();
 		yo.destruir();
 		std::cout << "Jugador " << i  << " saliendo" <<std::endl;
