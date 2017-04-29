@@ -5,11 +5,14 @@
 #ifndef TPCONCURRENTEATREVIDO_DOCEHANLDER_H
 #define TPCONCURRENTEATREVIDO_DOCEHANLDER_H
 
-#include "BasicHandler.h"
-#include "../core/HandlerSenial.h"
+#include "HandlerSenial.h"
+#include "JugadorHandler.h"
 
-class DoceHandler : public BasicHandler {
+class DoceHandler : public JugadorHandler {
 public:
-    DoceHandler() : BasicHandler(HandlerSenial::SIGNAL_12) {}
+    DoceHandler(Jugador *jugador) : JugadorHandler(jugador, HandlerSenial::SIGNAL_12) {}
+    void makeJugadorPlay(){
+    	getJugador()->hacerVenia();
+	}
 };
 #endif //TPCONCURRENTEATREVIDO_DOCEHANLDER_H

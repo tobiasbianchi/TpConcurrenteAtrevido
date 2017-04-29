@@ -5,11 +5,14 @@
 #ifndef TPCONCURRENTEATREVIDO_ONCEHANLDER_H
 #define TPCONCURRENTEATREVIDO_ONCEHANLDER_H
 
-#include "BasicHandler.h"
 #include "../core/HandlerSenial.h"
+#include "JugadorHandler.h"
 
-class OnceHandler : public BasicHandler{
+class OnceHandler : public JugadorHandler{
 public:
-    OnceHandler() : BasicHandler(HandlerSenial::SIGNAL_11) {}
+    OnceHandler(Jugador *jugador) : JugadorHandler(jugador, HandlerSenial::SIGNAL_11) {}
+    void makeJugadorPlay(){
+    	getJugador()->hacerBuenasNoches();
+    }
 };
 #endif //TPCONCURRENTEATREVIDO_ONCEHANLDER_H

@@ -4,7 +4,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <memory.h>
-
+#include <vector>
 #include "HandlerEvento.h"
 
 class HandlerSenial {
@@ -21,11 +21,12 @@ class HandlerSenial {
 		static const int SIGNAL_11 = SIGUSR2;
 		static const int SIGNAL_12  = SIGTTIN;
 		static const int SIGATREVIDO = SIGTTOU;
-		static const int SIG_MANO = SIGCHLD;
+		static const int SIG_REPETIDA = SIGCHLD;
 
 		static HandlerSenial* getInstancia();
 		static void destruir ();
-		HandlerEvento* registrarHandler ( int signum,HandlerEvento* eh );
+		HandlerEvento* registrarHandler ( int signum,HandlerEvento* eh);
+		HandlerEvento* registrarHandler ( int signum,HandlerEvento* eh, std::vector<int> blockSignums );
 		int removerHandler ( int signum );
 		static void bloquearSenial(int signum);
 		static void desbloquearSenial(int signum);

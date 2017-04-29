@@ -1,5 +1,6 @@
 #include "HandlerSenial.h"
 #include "excepciones.h"
+#include <errno.h>
 
 HandlerSenial* HandlerSenial :: instance = NULL;
 HandlerEvento* HandlerSenial :: signal_handlers [ NSIG ];
@@ -21,8 +22,12 @@ void HandlerSenial :: destruir () {
 		instance = NULL;
 	}
 }
+HandlerEvento* HandlerSenial::registrarHandler(int signum, HandlerEvento * eh){
+	std::vector<int> signalsToBlock;
+	return registrarHandler(signum,eh,signalsToBlock);
+}
 
-HandlerEvento* HandlerSenial :: registrarHandler ( int signum,HandlerEvento* eh ) {
+HandlerEvento* HandlerSenial :: registrarHandler ( int signum,HandlerEvento* eh, std::vector<int> blockSignums ) {
 
 	HandlerEvento* old_eh = HandlerSenial :: signal_handlers [ signum ];
 	HandlerSenial :: signal_handlers [ signum ] = eh;
@@ -31,11 +36,19 @@ HandlerEvento* HandlerSenial :: registrarHandler ( int signum,HandlerEvento* eh 
 	memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = HandlerSenial :: dispatcher;
 	sa.sa_flags = SA_RESTART; //makes system calls restart if interrupted (not aplicable to all)
+
 	if (sigemptyset ( &sa.sa_mask ) == -1){
 		throw Error("Senial empty mask",strerror(errno));
 	}
+
 	if (sigaddset ( &sa.sa_mask,signum ) == -1){
 		throw Error("Senial agregar set", strerror(errno));
+	}
+
+	for (int i = 0; i < blockSignums.size(); i++){
+		if (sigaddset ( &sa.sa_mask,blockSignums[i] ) == -1){
+			throw Error("Senial Bloquear agregar set", strerror(errno));
+		}
 	}
 
 	if (sigaction ( signum,&sa,0) == -1 ){ // cambiar accion de la senial

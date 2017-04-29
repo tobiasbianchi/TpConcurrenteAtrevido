@@ -5,13 +5,15 @@
 #ifndef TPCONCURRENTEATREVIDO_SIETEHANDLER_H
 #define TPCONCURRENTEATREVIDO_SIETEHANDLER_H
 
-#include "BasicHandler.h"
 #include "../core/HandlerSenial.h"
+#include "JugadorHandler.h"
 
-class SieteHandler : public BasicHandler
+class SieteHandler : public JugadorHandler
 {
 public:
-    SieteHandler() : BasicHandler(HandlerSenial::SIGATREVIDO) {}
-
+    SieteHandler(Jugador *jugador) : JugadorHandler(jugador, HandlerSenial::SIGATREVIDO) {}
+    void makeJugadorPlay(){
+    	getJugador()->hacerAtrevido();
+    }
 };
 #endif //TPCONCURRENTEATREVIDO_SIETEHANDLER_H
