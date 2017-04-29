@@ -14,7 +14,6 @@ public:
 	static std::vector<Pipe*> getPipes(int cantidadJugadores){
 		std::vector<Pipe*> pipes;
 		for (int i = 0; i < cantidadJugadores; i++ ){
-			std::cout << "creado" << std::endl;
 			pipes.push_back(new Pipe());
 		}
 		return pipes;

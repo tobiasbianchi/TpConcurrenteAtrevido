@@ -6,7 +6,7 @@
 #include "jugador.h"
 
 Mesa::Mesa(unsigned char numeroPartida, int cantidadJugadores) : contador(numeroPartida),
-							maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA)
+							maso(ID_MASO_GENERAL_COMAPRTIDO, RUTAARCHIVOMESA, ID_MASO_GENERAL_MUTEX, RUTAARCHIVOMESA)
 {
 	//Como no se pueden copiar semaforos hay que reservar la memoria exacta antes o usar otra estructura contenedora.
 	moderadorTurnos.reserve(cantidadJugadores);

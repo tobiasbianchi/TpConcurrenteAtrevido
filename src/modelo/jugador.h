@@ -6,13 +6,13 @@
 #include <mesa.h>
 #include "../core/semaforo.h"
 #include "../core/HandlerEvento.h"
+#include "../core/HandlerSenial.h"
 #include "../handlers/SIGINT_Handler.h"
 #include <vector>
 #include "pipe.h"
+#include "objetocompartido.h"
 
-#define MAXIMOTIEMPOTURNO 2
-
-#define RUTAJUGADOR "archivos/jugador"
+#include "definiciones.h"
 
 class Jugador
 {
@@ -21,7 +21,7 @@ private:
 	int numeroJugador;
 	std::vector<HandlerEvento *> gameSignals;
 	SIGINT_Handler quitHandler;
-	Maso maso;
+	ObjetoCompartido<Maso> maso;
 	Mesa &mesa;
     Semaforo inicio;
 	Semaforo turnoTermino;

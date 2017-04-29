@@ -22,7 +22,7 @@ const std::string Jugador::VENIA = "\"Hizo venia\"";
 
 Jugador::Jugador(int numeroJugador, Mesa &mesa, std::vector<int> cartas,
 		std::vector<Pipe*> pipes) :
-										  maso(numeroJugador, cartas, RUTAJUGADOR),
+										  maso(numeroJugador,RUTAJUGADOR,numeroJugador, cartas, RUTAJUGADOR),
 										  numeroJugador(numeroJugador), mesa(mesa),
 										  inicio(Jugador::ID_SEMAFORO_INICIO),
 										  turnoTermino(Jugador::ID_SEMAFORO_TURNO_TERMINADO)
@@ -64,7 +64,7 @@ Jugador::~Jugador(){
 }
 
 void Jugador::destruir(){
-	maso.destruir();
+	maso.invocar()->destruir();
 	delete lectura;
 	for (int i = 0; i < pipesEscritura.size(); i++){
 		delete pipesEscritura.at(i);
@@ -85,23 +85,24 @@ void Jugador::jugar()
 {
 	while(quitHandler.getWasCalled() == 0)
 	{
-        try{
-        	//esperar a que todos reaccionen
-        	turnoTermino.esperarACero();
-        	//me toca
-        	mesa.pedirTurno(numeroJugador);
-            decir("Jugando");
-            pensar();
-            int carta = maso.sacarCarta();
-            bool ultimaCarta = (maso.contarCartas() == 0);
-            mesa.hacerJugada(carta, ultimaCarta);
+        //esperar a que todos reaccionen
+    	try{
+    		turnoTermino.esperarACero();
+    		//me toca
+    		mesa.pedirTurno(numeroJugador);
+        	decir("Jugando");
+        	pensar();
+        	int carta = maso.invocar()->sacarCarta();
+        	bool ultimaCarta = (maso.invocar()->contarCartas() == 0);
+        	mesa.hacerJugada(carta, ultimaCarta);
 
-            mesa.pasarTurno(numeroJugador);
-        }catch (Error e){
-        	if (errno != EINTR) {
-                throw e;
-            }
+        	mesa.pasarTurno(numeroJugador);
+        } catch(Error e){
+        	if (errno != EINTR){
+        		throw e;
+        	}
         }
+		
 	}
 }
 
@@ -140,7 +141,7 @@ void Jugador::ponerMano(){
 	decir("pone mano");
 	if (mesa.ponerMano()){
 		std::vector<int> robadas = mesa.robarCartas();
-		maso.agregarCartas(robadas);
+		maso.invocar()->agregarCartas(robadas);
 		std::string robada = "";
 		for (int i = 0; i < robadas.size(); i++){
 			//TODO robar cartas
@@ -152,6 +153,7 @@ void Jugador::ponerMano(){
 
 void Jugador::mostrarseATodos(){
 	const void* data = &numeroJugador;
+	decir("mostrandose");
 	for(int i = 0; i < pipesEscritura.size(); i++){
 		pipesEscritura.at(i)->escribir(data,sizeof(int));
 	}
@@ -159,6 +161,7 @@ void Jugador::mostrarseATodos(){
 
 void Jugador::verATodos(){
 	std::string vistos = "";
+	decir("viendo");
 	for(int i = 0; i < pipesEscritura.size(); i++){
 		int buffer = 0;
 		lectura->leer(&buffer,sizeof(int));

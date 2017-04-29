@@ -14,6 +14,7 @@
 #include <time.h>
 #include "pipe.h"
 #include "PipesFactory.h"
+#include "Arbitro.h"
 using namespace std;
 
 int main(int argc, char** argv)
@@ -24,7 +25,6 @@ int main(int argc, char** argv)
 	int i=0;
 
 	std::vector<Pipe*> allPipes = PipeFactory::getPipes(cantidadJugadores);
-	std::cout << "pipes creados" << std::endl;
 	std::vector<std::vector<int>> masosRepartidos = CartasFactory::prepararCartas(cantidadJugadores);
 	Semaforo esperarATodosInicializados(Jugador::ID_SEMAFORO_INICIO,cantidadJugadores + 1);
 	Semaforo esperarFinTurno(Jugador::ID_SEMAFORO_TURNO_TERMINADO,0);
@@ -55,12 +55,15 @@ int main(int argc, char** argv)
     HandlerSenial::getInstancia()->registrarHandler(SIGINT,&handler);
 	esperarATodosInicializados.tomar();
 	esperarATodosInicializados.esperarACero();
+	
+	Arbitro arbitro(cantidadJugadores);
 
 	while(handler.getWasCalled() != 1)
 	{
 		//system("clear");
 		//mesa.imprimir();
-		sleep(1);
+		arbitro.contarCartas();
+		sleep(4);
 	}
 
 	for (int i = 0; i < cantidadJugadores; i++){
@@ -74,6 +77,6 @@ int main(int argc, char** argv)
 	for (int i = 0; i < allPipes.size(); i++){
 		delete allPipes.at(i);
 	}
-	std::cout << "Caso maestro saliendo" <<std::endl;
+	std::cout << "Arbitro saliendo" <<std::endl;
 	return 0;
 }

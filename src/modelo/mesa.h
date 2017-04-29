@@ -5,8 +5,8 @@
 #include <maso.h>
 #include <semaforo.h>
 #include <vector>
+#include "definiciones.h"
 
-#define RUTAARCHIVOMESA "archivos/mesa"
 
 class Mesa
 {
