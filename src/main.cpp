@@ -15,7 +15,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	unsigned char cantidadJugadores = 5;
+	int cantidadJugadores = 5;
 	bool esHijo = false;
 	int i=0;
 
@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 	Mesa mesa(1, cantidadJugadores);
 	//creo 7 semaforos, 5 por jugadores, 1 por barrera y 1 por mutex del maso.
 
-	for(i = 0;i<cantidadJugadores && !esHijo;i++)
+	for(i = 0;i < cantidadJugadores && !esHijo;i++)
 		esHijo = fork() == 0;
 
 	if(esHijo)
@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 		Jugador yo(i, mesa);
 		yo.jugar();
 		yo.destruir();
-		std::cout << "Jugador " << i + 1 << "saliendo" <<std::endl;
+		std::cout << "Jugador " << i  << " saliendo" <<std::endl;
 		exit(0);
 	}
 

@@ -14,14 +14,13 @@ private:
 	ObjetoCompartido<Maso> maso;
 	std::vector<Semaforo> moderadorTurnos;
 	unsigned int contador;
-	ObjetoCompartido<unsigned char> turnoJugador;
 	void hacerEsperarFinTurno();
 public:
-	Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores);
+	Mesa(unsigned char numeroPartida, int cantidadJugadores);
 	unsigned int idRecurso();
-	bool pedirTurno(unsigned char numeroJugador);
+	bool pedirTurno(int numeroJugador);
 	bool hacerJugada(unsigned char carta);
-	bool pasarTurno(unsigned char numeroJugador);
+	bool pasarTurno(int numeroJugador);
 	void imprimir();
 	bool ponerMano();
 	std::vector<unsigned char> robarCartas();

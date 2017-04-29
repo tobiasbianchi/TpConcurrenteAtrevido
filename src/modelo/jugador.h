@@ -16,7 +16,7 @@ class Jugador
 {
 private:
 
-	unsigned char numeroJugador;
+	int numeroJugador;
 	std::vector<HandlerEvento *> gameSignals;
 	SIGINT_Handler quitHandler;
 	Maso maso;
@@ -32,7 +32,7 @@ private:
 		return allSignals;
 	}
 public:
-	Jugador(unsigned char numeroJugador, Mesa &mesa);
+	Jugador(int numeroJugador, Mesa &mesa);
 	~Jugador();
 	void pensar();
 	void jugar();

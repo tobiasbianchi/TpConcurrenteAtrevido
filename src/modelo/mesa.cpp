@@ -5,11 +5,12 @@
 #include "../core/HandlerSenial.h"
 #include "jugador.h"
 
-Mesa::Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores) : contador(numeroPartida), maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA), turnoJugador(idRecurso(), RUTAARCHIVOMESA)
+Mesa::Mesa(unsigned char numeroPartida, int cantidadJugadores) : contador(numeroPartida),
+							maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA)
 {
 	//Como no se pueden copiar semaforos hay que reservar la memoria exacta antes o usar otra estructura contenedora.
 	moderadorTurnos.reserve(cantidadJugadores);
-	for(unsigned char i = 0; i<cantidadJugadores; i++)
+	for(int i = 0; i<cantidadJugadores; i++)
 		moderadorTurnos.emplace_back(idRecurso(), (i!=0) ? (0) : (1), RUTAARCHIVOMESA);
 }
 
@@ -18,12 +19,9 @@ unsigned int Mesa::idRecurso()
 	return contador++;
 }
 
-bool Mesa::pedirTurno(unsigned char numeroJugador)
+bool Mesa::pedirTurno(int numeroJugador)
 {
-
 	moderadorTurnos.at(numeroJugador-1).tomar();
-	std::cout << "Proximo  a jugar es " << (int)(numeroJugador + 1) << std::endl;
-	*(turnoJugador.invocar()) = numeroJugador;
 }
 
 void Mesa::hacerEsperarFinTurno(){
@@ -60,15 +58,13 @@ bool Mesa::hacerJugada(unsigned char carta)
 		hacerEsperarFinTurno();
 		HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIG_REPETIDA);
 	}
-	//std::cout << "se tiro un " << (int)carta << std::endl;
-	//imprimir();
+	std::cout << "se tiro un " << (int)carta << std::endl;
+	imprimir();
 	return true;
 }
 
-bool Mesa::pasarTurno(unsigned char _numeroJugador)
+bool Mesa::pasarTurno(int numeroJugador)
 {
-	unsigned char numeroJugador = (*(turnoJugador.invocar()));
-	std::cout << "turno dado a numeroJugador" << (int)numeroJugador << std::endl;
 	if(numeroJugador < moderadorTurnos.size()){
 		moderadorTurnos.at(numeroJugador).liberar();
 	}

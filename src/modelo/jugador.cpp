@@ -21,7 +21,7 @@ const std::string Jugador::BUENOSDIAS = "Buenos Dias Seniorita";
 const std::string Jugador::BUENASNOCHES = "Buenas Noches Caballero";
 const std::string Jugador::VENIA = "\"Hizo venia\"";
 
-Jugador::Jugador(unsigned char numeroJugador, Mesa &mesa) : maso(numeroJugador, RUTAJUGADOR),
+Jugador::Jugador(int numeroJugador, Mesa &mesa) : maso(numeroJugador, RUTAJUGADOR),
 										  numeroJugador(numeroJugador), mesa(mesa),
 										  inicio(Jugador::ID_SEMAFORO_INICIO),
 										  turnoTermino(Jugador::ID_SEMAFORO_TURNO_TERMINADO)
@@ -55,7 +55,8 @@ void Jugador::destruir(){
 void Jugador::pensar()
 {
 	int srand(clock());
-    int remaining_time = sleep(rand() % MAXIMOTIEMPOTURNO);
+    //int remaining_time = sleep(rand() % MAXIMOTIEMPOTURNO);
+	int remaining_time = sleep(1);
 	while (remaining_time != 0 && remaining_time != -1){ //if interrupted in sleep, will wait whole time
         remaining_time = sleep(remaining_time);
     }
@@ -72,8 +73,8 @@ void Jugador::jugar()
         	mesa.pedirTurno(numeroJugador);
             decir("Jugando");
             pensar();
-            mesa.hacerJugada(numeroJugador);
-            mesa.pasarTurno(numeroJugador + 1);
+            mesa.hacerJugada(numeroJugador + 2);
+            mesa.pasarTurno(numeroJugador);
         }catch (Error e){
         	if (errno != EINTR) {
                 throw e;
@@ -83,7 +84,7 @@ void Jugador::jugar()
 }
 
 void Jugador::decir(std::string mensaje) {
-    std::cout << "Jugador("  << (int)numeroJugador << "): " << mensaje << std::endl;
+    std::cout << "Jugador("  << numeroJugador << "): " << mensaje << std::endl;
 }
 
 void Jugador::hacerVenia(){
