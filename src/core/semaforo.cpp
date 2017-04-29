@@ -22,7 +22,6 @@ Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo
 	if(id == -1)
 		throw Error("Creacion del semaforo", strerror(errno));
 
-	std::cout << "Created semaphore " << id << std::endl;
 	union semun sem;
 	sem.val = cantidadRecursos;
 
