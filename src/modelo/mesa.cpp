@@ -90,3 +90,7 @@ bool Mesa::ponerMano() {
 std::vector<int> Mesa::robarCartas(){
 	return maso.invocar()->robarMaso();
 }
+
+int Mesa::cantidadJugadores(){
+	return moderadorTurnos.size();
+}

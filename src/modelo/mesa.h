@@ -23,6 +23,7 @@ public:
 	bool pasarTurno(int numeroJugador);
 	void imprimir();
 	bool ponerMano();
+	int cantidadJugadores();
 	std::vector<int> robarCartas();
 	void destruir(){
 		for (int i = 0;  i < moderadorTurnos.size(); i++){

@@ -8,6 +8,7 @@
 #include "../core/HandlerEvento.h"
 #include "../handlers/SIGINT_Handler.h"
 #include <vector>
+#include "pipe.h"
 
 #define MAXIMOTIEMPOTURNO 2
 
@@ -24,6 +25,8 @@ private:
 	Mesa &mesa;
     Semaforo inicio;
 	Semaforo turnoTermino;
+	std::vector<Pipe*> pipesEscritura;
+	Pipe* lectura;
 	void decir(std::string mensaje);
 	void ponerMano();
 	std::vector<int> getBlockedSignals() {
@@ -32,8 +35,11 @@ private:
 		std::vector<int> allSignals(signals, signals + sizeof(signals)/sizeof(int));
 		return allSignals;
 	}
+
+	void initSignals();
+	void initPipes(std::vector<Pipe*> pipes);
 public:
-	Jugador(int numeroJugador, Mesa &mesa, std::vector<int> cartas);
+	Jugador(int numeroJugador, Mesa &mesa, std::vector<int> cartas, std::vector<Pipe*> pipes);
 	~Jugador();
 	void pensar();
 	void jugar();
@@ -44,6 +50,8 @@ public:
 	void hacerVenia();
 	void reaccionoPorCompleto();
 	void destruir();
+	void mostrarseATodos();
+	void verATodos();
 	static const std::string ATREVIDO;
 	static const std::string BUENOSDIAS;
 	static const std::string BUENASNOCHES;

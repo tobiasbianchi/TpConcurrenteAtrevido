@@ -10,9 +10,10 @@
 #include "excepciones.h"
 #include "modelo/jugador.h"
 #include "CartasFactory.h"
-#include<stdlib.h>
-#include<time.h>
-
+#include <stdlib.h>
+#include <time.h>
+#include "pipe.h"
+#include "PipesFactory.h"
 using namespace std;
 
 int main(int argc, char** argv)
@@ -22,6 +23,8 @@ int main(int argc, char** argv)
 	bool esHijo = false;
 	int i=0;
 
+	std::vector<Pipe*> allPipes = PipeFactory::getPipes(cantidadJugadores);
+	std::cout << "pipes creados" << std::endl;
 	std::vector<std::vector<int>> masosRepartidos = CartasFactory::prepararCartas(cantidadJugadores);
 	Semaforo esperarATodosInicializados(Jugador::ID_SEMAFORO_INICIO,cantidadJugadores + 1);
 	Semaforo esperarFinTurno(Jugador::ID_SEMAFORO_TURNO_TERMINADO,0);
@@ -34,7 +37,7 @@ int main(int argc, char** argv)
 
 	if(esHijo)
 	{
-		Jugador yo(i, mesa, masosRepartidos[i - 1]);
+		Jugador yo(i, mesa, masosRepartidos[i - 1], allPipes);
 		yo.jugar();
 		yo.destruir();
 		std::cout << "Jugador " << i  << " saliendo" <<std::endl;
@@ -68,6 +71,9 @@ int main(int argc, char** argv)
 	esperarFinTurno.destruir();
 	mesa.destruir();
 
+	for (int i = 0; i < allPipes.size(); i++){
+		delete allPipes.at(i);
+	}
 	std::cout << "Caso maestro saliendo" <<std::endl;
 	return 0;
 }

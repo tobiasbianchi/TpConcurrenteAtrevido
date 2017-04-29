@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <excepciones.h>
 #include <pipe.h>
+#include <iostream>
 
 Pipe::Pipe() {
 	this->escritura = true;
