@@ -7,6 +7,11 @@ Maso::Maso(int idProyecto, const char *rutaArchivo) : mutex(idProyecto, rutaArch
 {	
 }
 
+Maso::Maso(int idProyecto,std::vector<unsigned char> cartas, const char *rutaArchivo) : mutex(idProyecto, rutaArchivo)
+{
+	this->agregarCartas(cartas);
+}
+
 bool Maso::ponerCarta(unsigned char carta)
 {
 	mutex.tomar();
@@ -37,6 +42,14 @@ void Maso::mostrarCartas()
 	mutex.liberar();
 }
 
+void Maso::agregarCartas(std::vector<unsigned char> cartas){
+	mutex.tomar();
+	for (int i = 0; i < cartas.size(); i++){
+		this->cartas.ponerCarta(cartas.at(i));
+	}
+	mutex.liberar();
+}
+
 bool Maso::ponerMano(int cantidadJugadores) {
     mutex.tomar();
 
@@ -60,4 +73,12 @@ std::vector<unsigned char> Maso::robarMaso() {
     mutex.liberar();
 
     return cartarRobadas;
+}
+
+int Maso::contarCartas(){
+	int cartas = 0;
+	mutex.tomar();
+	cartas = this->cartas.contarCartas();
+	mutex.liberar();
+	return cartas;
 }

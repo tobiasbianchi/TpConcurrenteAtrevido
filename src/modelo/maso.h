@@ -43,6 +43,10 @@ private:
 			}
 			return 0;
 		}
+
+		unsigned char contarCartas(){
+			return cantidadCartas;
+		}
 	};
 
 	struct arregloCartas cartas;
@@ -50,10 +54,13 @@ private:
 	int manosApoyadas = 0;
 public:
 	Maso(int idProyecto, const char *rutaArchivo = "/bin/bash");
+	Maso(int idProyecto, std::vector<unsigned char> cartas, const char *rutaArchivo = "/bin/bash");
 	bool ponerCarta(unsigned char carta);
 	unsigned char sacarCarta();
 	void mostrarCartas();
+	void agregarCartas(std::vector<unsigned char> cartas);
 	bool ponerMano( int cantidadJugadores);
+	int contarCartas();
 	std::vector<unsigned char> robarMaso();
 	void destruir(){
 		mutex.destruir();

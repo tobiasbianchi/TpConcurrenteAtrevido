@@ -73,7 +73,10 @@ void Jugador::jugar()
         	mesa.pedirTurno(numeroJugador);
             decir("Jugando");
             pensar();
-            mesa.hacerJugada(numeroJugador + 2);
+            unsigned char carta = maso.sacarCarta();
+            bool ultimaCarta = maso.contarCartas() == 0;
+            mesa.hacerJugada(numeroJugador + 2, );
+
             mesa.pasarTurno(numeroJugador);
         }catch (Error e){
         	if (errno != EINTR) {
