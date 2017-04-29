@@ -2,7 +2,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <vector>
-
 #include <mesa.h>
 #include <maso.h>
 #include "core/semaforo.h"
@@ -39,7 +38,7 @@ int main(int argc, char** argv)
 	HandlerSenial::bloquearSenial(HandlerSenial::SIGNAL_10);
 	HandlerSenial::bloquearSenial(HandlerSenial::SIGNAL_11);
 	HandlerSenial::bloquearSenial(HandlerSenial::SIGNAL_12);
-	HandlerSenial::bloquearSenial(HandlerSenial::SIG_MANO);
+	HandlerSenial::bloquearSenial(HandlerSenial::SIG_REPETIDA);
 	HandlerSenial::bloquearSenial(HandlerSenial::SIGATREVIDO);
 
     SIGINT_Handler handler;
