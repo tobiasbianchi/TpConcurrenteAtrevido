@@ -41,7 +41,7 @@ bool Maso::ponerMano(int cantidadJugadores) {
     mutex.tomar();
 
     manosApoyadas++;
-    if (manosApoyadas > cantidadJugadores)
+    if (manosApoyadas >= cantidadJugadores)
         manosApoyadas = 0;
     mutex.liberar();
 
