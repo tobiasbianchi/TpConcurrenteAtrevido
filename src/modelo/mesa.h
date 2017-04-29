@@ -15,7 +15,7 @@ private:
 	std::vector<Semaforo> moderadorTurnos;
 	unsigned int contador;
 	ObjetoCompartido<unsigned char> turnoJugador;
-
+	void hacerEsperarFinTurno(Semaforo &turnoTermino);
 public:
 	Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores);
 	unsigned int idRecurso();

@@ -2,9 +2,7 @@
 #include <signal.h>
 #include <HandlerSenial.h>
 #include <iostream>
-#include "mesa.h"
 #include "../core/HandlerSenial.h"
-
 
 Mesa::Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores) : contador(numeroPartida), maso(idRecurso(), RUTAARCHIVOMESA, idRecurso(), RUTAARCHIVOMESA), turnoJugador(idRecurso(), RUTAARCHIVOMESA)
 {
@@ -25,43 +23,40 @@ bool Mesa::pedirTurno(unsigned char numeroJugador)
 	*(turnoJugador.invocar()) = numeroJugador;
 }
 
+void Mesa::hacerEsperarFinTurno(Semaforo &turnoTermino){
+	for (int j = 0; j < moderadorTurnos.size(); j++){
+		turnoTermino.liberar();
+	}
+}
+
 bool Mesa::hacerJugada(unsigned char carta, Semaforo &turnoTermino)
 {
 	bool repitioUltima = maso.invocar()->ponerCarta(carta);
+
 	switch (carta){
 		case 10:
-			for (int j = 0; j < 5; j++){
-				turnoTermino.liberar();
-			}
+			hacerEsperarFinTurno(turnoTermino);
 			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_10);
 			break;
 		case 11:
-			for (int j = 0; j < 5; j++){
-				turnoTermino.liberar();
-			}
+			hacerEsperarFinTurno(turnoTermino);
 			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_11);
 			break;
 		case 12:
-			for (int j = 0; j < 5; j++){
-				turnoTermino.liberar();
-			}
+			hacerEsperarFinTurno(turnoTermino);
 			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_12);
 			break;
 		case 7:
-			for (int j = 0; j < 5; j++){
-				turnoTermino.liberar();
-			}
+			hacerEsperarFinTurno(turnoTermino);
 			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGATREVIDO);
-			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIG_MANO);
 			break;
 	}
 
 	if (repitioUltima && ((int)carta != 7)){
-		for (int j = 0; j < 5; j++){
-			turnoTermino.liberar();
-		}
-		HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIG_MANO);
+		hacerEsperarFinTurno(turnoTermino);
+		HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIG_REPETIDA);
 	}
+
 	imprimir();
 	return true;
 }
