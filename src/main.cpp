@@ -19,8 +19,8 @@ int main(int argc, char** argv)
 	bool esHijo = false;
 	int i=0;
 
-	Semaforo esperarATodosInicializados(10,cantidadJugadores + 1);
-	Semaforo esperarFinTurno(11,0);
+	Semaforo esperarATodosInicializados(Jugador::ID_SEMAFORO_INICIO,cantidadJugadores + 1);
+	Semaforo esperarFinTurno(Jugador::ID_SEMAFORO_TURNO_TERMINADO,0);
 	Mesa mesa(1, cantidadJugadores);
 	//creo 7 semaforos, 5 por jugadores, 1 por barrera y 1 por mutex del maso.
 
@@ -29,9 +29,10 @@ int main(int argc, char** argv)
 
 	if(esHijo)
 	{
-		Jugador yo(i, mesa, esperarATodosInicializados, esperarFinTurno);
+		Jugador yo(i, mesa);
 		yo.jugar();
-		std::cout << "Jugador " << i << "saliendo" <<std::endl;
+		yo.destruir();
+		std::cout << "Jugador " << i + 1 << "saliendo" <<std::endl;
 		exit(0);
 	}
 
@@ -57,6 +58,11 @@ int main(int argc, char** argv)
 	for (int i = 0; i < cantidadJugadores; i++){
 		wait(NULL);
 	}
+
+	esperarATodosInicializados.destruir();
+	esperarFinTurno.destruir();
+	mesa.destruir();
+
 	std::cout << "Caso maestro saliendo" <<std::endl;
 	return 0;
 }

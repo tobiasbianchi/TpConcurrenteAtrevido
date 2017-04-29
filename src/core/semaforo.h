@@ -16,10 +16,11 @@ class Semaforo
 {
 private:
 	int id;
+	void obtenerSemaforo(int idProyecto, const char* rutaArchivo);
 public:
 
 	Semaforo(int idProyecto, int cantidadRecursos, const char* rutaArchivo = "/bin/bash");
-
+	Semaforo(int idProyecto, const char* rutaArchivo = "/bin/bash");
 	//No se puden copiar semaforos.
 	Semaforo &operator=(const Semaforo &) = delete;
 
@@ -27,7 +28,8 @@ public:
 	void liberar();
 	void esperarACero();
 	int obtenerValor();
-	virtual ~Semaforo();
+	void destruir();
+	virtual ~Semaforo(){};
 };
 
 #endif

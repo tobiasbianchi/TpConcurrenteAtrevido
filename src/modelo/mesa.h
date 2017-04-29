@@ -15,20 +15,21 @@ private:
 	std::vector<Semaforo> moderadorTurnos;
 	unsigned int contador;
 	ObjetoCompartido<unsigned char> turnoJugador;
-	void hacerEsperarFinTurno(Semaforo &turnoTermino);
+	void hacerEsperarFinTurno();
 public:
 	Mesa(unsigned char numeroPartida, unsigned char cantidadJugadores);
 	unsigned int idRecurso();
 	bool pedirTurno(unsigned char numeroJugador);
-	bool hacerJugada(unsigned char carta, Semaforo &turnoTermino);
-	bool pasarTurno();
+	bool hacerJugada(unsigned char carta);
+	bool pasarTurno(unsigned char numeroJugador);
 	void imprimir();
 	bool ponerMano();
 	std::vector<unsigned char> robarCartas();
-	~Mesa(){
-		while (moderadorTurnos.size() != 0){
-			moderadorTurnos.pop_back();
+	void destruir(){
+		for (int i = 0;  i < moderadorTurnos.size(); i++){
+			moderadorTurnos[i].destruir();
 		}
+		maso.invocar()->destruir();
 	}
 };
 

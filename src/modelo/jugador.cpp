@@ -21,16 +21,17 @@ const std::string Jugador::BUENOSDIAS = "Buenos Dias Seniorita";
 const std::string Jugador::BUENASNOCHES = "Buenas Noches Caballero";
 const std::string Jugador::VENIA = "\"Hizo venia\"";
 
-Jugador::Jugador(unsigned char numeroJugador, Mesa &mesa, Semaforo &inicio,
-                 Semaforo &turnoTermino) : maso(numeroJugador, RUTAJUGADOR),
+Jugador::Jugador(unsigned char numeroJugador, Mesa &mesa) : maso(numeroJugador, RUTAJUGADOR),
 										  numeroJugador(numeroJugador), mesa(mesa),
-										  inicio(inicio), turnoTermino(turnoTermino)
+										  inicio(Jugador::ID_SEMAFORO_INICIO),
+										  turnoTermino(Jugador::ID_SEMAFORO_TURNO_TERMINADO)
 {
 	this->gameSignals.push_back(new DiezHandler(this));
 	this->gameSignals.push_back(new OnceHandler(this));
 	this->gameSignals.push_back(new DoceHandler(this));
 	this->gameSignals.push_back(new SieteHandler(this));
 	this->gameSignals.push_back(new CartaRepetidaHandler(this));
+	this->gameSignals.push_back(&quitHandler);
 	for (int i = 0; i < gameSignals.size(); i++){
 		HandlerEvento *eh = gameSignals[i];
 		HandlerSenial::getInstancia()->registrarHandler(eh->getSignal(),eh,getBlockedSignals());
@@ -47,6 +48,10 @@ Jugador::~Jugador(){
 	gameSignals.clear();
 }
 
+void Jugador::destruir(){
+	maso.destruir();
+}
+
 void Jugador::pensar()
 {
 	int srand(clock());
@@ -61,19 +66,16 @@ void Jugador::jugar()
 	while(quitHandler.getWasCalled() == 0)
 	{
         try{
-            //me toca
-            mesa.pedirTurno(numeroJugador);
-            //esperar a que todos reaccionen
-            decir("valor turnoTermino " + std::to_string(turnoTermino.obtenerValor()));
-            turnoTermino.esperarACero();
-
+        	//esperar a que todos reaccionen
+        	turnoTermino.esperarACero();
+        	//me toca
+        	mesa.pedirTurno(numeroJugador);
+            decir("Jugando");
             pensar();
-            mesa.hacerJugada(numeroJugador + 2, turnoTermino);
-
-            mesa.pasarTurno();
-
+            mesa.hacerJugada(numeroJugador);
+            mesa.pasarTurno(numeroJugador + 1);
         }catch (Error e){
-            if (errno != EINTR) {
+        	if (errno != EINTR) {
                 throw e;
             }
         }

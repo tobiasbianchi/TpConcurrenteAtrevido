@@ -55,6 +55,9 @@ public:
 	void mostrarCartas();
 	bool ponerMano( int cantidadJugadores);
 	std::vector<unsigned char> robarMaso();
+	void destruir(){
+		mutex.destruir();
+	}
 };
 
 

@@ -7,11 +7,26 @@
 #include <string>
 #include <string.h>
 #include <definiciones.h>
-
 #include <iostream>
 
+// inicializa el semaforo en de id/archivo con el valor cantidad de recursos
 Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo) : id(-1)
 {
+	obtenerSemaforo(idProyecto, rutaArchivo);
+
+	union semun sem;
+	sem.val = cantidadRecursos;
+	if(semctl(id, 0, SETVAL, sem) == -1)
+		throw Error("Configuracion del semaforo", strerror(errno));
+};
+
+
+//solo obtienene el semaforo, asegurarse de usarlo cuando ya se creo el semaforo
+Semaforo::Semaforo(int idProyecto, const char* rutaArchivo){
+	obtenerSemaforo(idProyecto, rutaArchivo);
+}
+
+void Semaforo::obtenerSemaforo(int idProyecto, const char* rutaArchivo){
 	key_t clave = ftok(rutaArchivo, idProyecto);
 
 	if(clave == -1)
@@ -20,14 +35,8 @@ Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo
 	id = semget(clave, 1, IPC_CREAT | 0666);
 
 	if(id == -1)
-		throw Error("Creacion del semaforo", strerror(errno));
-
-	union semun sem;
-	sem.val = cantidadRecursos;
-
-	if(semctl(id, 0, SETVAL, sem) == -1)
-		throw Error("Configuracion del semaforo", strerror(errno));
-};
+		throw Error("Obtencion del semaforo", strerror(errno));
+}
 
 void Semaforo::tomar()
 {
@@ -70,13 +79,12 @@ int Semaforo::obtenerValor()
 	 return(semctl(id, 0, GETVAL, 0));
 }
 
-Semaforo::~Semaforo()
+void Semaforo::destruir()
 {
 
 	if(id != -1)
 	{
 		semctl(id, 0, IPC_RMID);
-		std::cout << "deleting semaforo id: " << id <<std::endl;
 		id = -1;
 	}
 }

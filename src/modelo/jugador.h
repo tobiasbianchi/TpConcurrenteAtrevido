@@ -21,8 +21,8 @@ private:
 	SIGINT_Handler quitHandler;
 	Maso maso;
 	Mesa &mesa;
-    Semaforo &inicio;
-	Semaforo &turnoTermino;
+    Semaforo inicio;
+	Semaforo turnoTermino;
 	void decir(std::string mensaje);
 	void ponerMano();
 	std::vector<int> getBlockedSignals() {
@@ -32,7 +32,7 @@ private:
 		return allSignals;
 	}
 public:
-	Jugador(unsigned char numeroJugador, Mesa &mesa, Semaforo &inicio, Semaforo &turnoTermino);
+	Jugador(unsigned char numeroJugador, Mesa &mesa);
 	~Jugador();
 	void pensar();
 	void jugar();
@@ -42,10 +42,13 @@ public:
 	void hacerCartaRepetida();
 	void hacerVenia();
 	void reaccionoPorCompleto();
+	void destruir();
 	static const std::string ATREVIDO;
 	static const std::string BUENOSDIAS;
 	static const std::string BUENASNOCHES;
 	static const std::string VENIA;
+	static const int ID_SEMAFORO_INICIO = 20;
+	static const int ID_SEMAFORO_TURNO_TERMINADO = 21;
 };
 
 
