@@ -19,11 +19,11 @@ public:
 	Mesa(unsigned char numeroPartida, int cantidadJugadores);
 	unsigned int idRecurso();
 	bool pedirTurno(int numeroJugador);
-	bool hacerJugada(unsigned char carta);
+	bool hacerJugada(int carta, bool ultimaCarta);
 	bool pasarTurno(int numeroJugador);
 	void imprimir();
 	bool ponerMano();
-	std::vector<unsigned char> robarCartas();
+	std::vector<int> robarCartas();
 	void destruir(){
 		for (int i = 0;  i < moderadorTurnos.size(); i++){
 			moderadorTurnos[i].destruir();

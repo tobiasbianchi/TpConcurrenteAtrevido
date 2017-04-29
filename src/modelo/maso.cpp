@@ -7,12 +7,12 @@ Maso::Maso(int idProyecto, const char *rutaArchivo) : mutex(idProyecto, rutaArch
 {	
 }
 
-Maso::Maso(int idProyecto,std::vector<unsigned char> cartas, const char *rutaArchivo) : mutex(idProyecto, rutaArchivo)
+Maso::Maso(int idProyecto,std::vector<int> cartas, const char *rutaArchivo) : mutex(idProyecto, rutaArchivo)
 {
 	this->agregarCartas(cartas);
 }
 
-bool Maso::ponerCarta(unsigned char carta)
+bool Maso::ponerCarta(int carta)
 {
 	mutex.tomar();
 
@@ -24,10 +24,10 @@ bool Maso::ponerCarta(unsigned char carta)
     return mismaQueLaAnterior;
 }
 
-unsigned char Maso::sacarCarta()
+int Maso::sacarCarta()
 {
 	mutex.tomar();
-	unsigned char cartaAux = cartas.sacarCarta();
+	int cartaAux = cartas.sacarCarta();
 	mutex.liberar();
 	return cartaAux;
 }
@@ -42,7 +42,7 @@ void Maso::mostrarCartas()
 	mutex.liberar();
 }
 
-void Maso::agregarCartas(std::vector<unsigned char> cartas){
+void Maso::agregarCartas(std::vector<int> cartas){
 	mutex.tomar();
 	for (int i = 0; i < cartas.size(); i++){
 		this->cartas.ponerCarta(cartas.at(i));
@@ -61,11 +61,11 @@ bool Maso::ponerMano(int cantidadJugadores) {
     return manosApoyadas == 0;
 }
 
-std::vector<unsigned char> Maso::robarMaso() {
-    std::vector<unsigned char> cartarRobadas;
+std::vector<int> Maso::robarMaso() {
+    std::vector<int> cartarRobadas;
 
     mutex.tomar();
-    unsigned char sacada = cartas.sacarCarta();
+    int sacada = cartas.sacarCarta();
     while ( sacada != 0){
         cartarRobadas.push_back(sacada);
         sacada = cartas.sacarCarta();
@@ -76,9 +76,8 @@ std::vector<unsigned char> Maso::robarMaso() {
 }
 
 int Maso::contarCartas(){
-	int cartas = 0;
 	mutex.tomar();
-	cartas = this->cartas.contarCartas();
+	int cartas = this->cartas.contarCartas();
 	mutex.liberar();
 	return cartas;
 }

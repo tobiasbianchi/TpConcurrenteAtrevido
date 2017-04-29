@@ -31,34 +31,39 @@ void Mesa::hacerEsperarFinTurno(){
 	}
 }
 
-bool Mesa::hacerJugada(unsigned char carta)
+bool Mesa::hacerJugada(int carta, bool ultimaCarta)
 {
 	bool repitioUltima = maso.invocar()->ponerCarta(carta);
 
-	switch (carta){
-		case 10:
+	if (ultimaCarta){
+		std::cout << "gano alguiend" << std::endl;
+		HandlerSenial::getInstancia()->broadcastSignal(SIGINT);
+	}else{
+		switch (carta){
+			case 10:
+				hacerEsperarFinTurno();
+				HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_10);
+				break;
+			case 11:
+				hacerEsperarFinTurno();
+				HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_11);
+				break;
+			case 12:
+				hacerEsperarFinTurno();
+				HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_12);
+				break;
+			case 7:
+				hacerEsperarFinTurno();
+				HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGATREVIDO);
+				break;
+		}
+
+		if (repitioUltima && ((int)carta != 7)){
 			hacerEsperarFinTurno();
-			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_10);
-			break;
-		case 11:
-			hacerEsperarFinTurno();
-			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_11);
-			break;
-		case 12:
-			hacerEsperarFinTurno();
-			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGNAL_12);
-			break;
-		case 7:
-			hacerEsperarFinTurno();
-			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIGATREVIDO);
-			break;
+			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIG_REPETIDA);
+		}
 	}
 
-	if (repitioUltima && ((int)carta != 7)){
-		hacerEsperarFinTurno();
-		HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIG_REPETIDA);
-	}
-	std::cout << "se tiro un " << (int)carta << std::endl;
 	imprimir();
 	return true;
 }
@@ -82,6 +87,6 @@ bool Mesa::ponerMano() {
 	return maso.invocar()->ponerMano(moderadorTurnos.size());
 }
 
-std::vector<unsigned char> Mesa::robarCartas(){
+std::vector<int> Mesa::robarCartas(){
 	return maso.invocar()->robarMaso();
 }

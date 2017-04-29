@@ -7,11 +7,12 @@
 
 #ifndef CARTASFACTORY_H_
 #define CARTASFACTORY_H_
+#include <vector>
 
 class CartasFactory {
 public:
 	CartasFactory();
-	static std::vector<std::vector<unsigned char>> prepararCartas(int jugadores);
+	static std::vector<std::vector<int>> prepararCartas(int jugadores);
 	virtual ~CartasFactory();
 };
 

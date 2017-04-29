@@ -5,21 +5,21 @@
 #include <mutex.h>
 #include <iostream>
 
-#define CARTASBARAJA 52
+#define CARTASBARAJA 48
 
 class Maso
 {
 private:
 	struct arregloCartas
 	{
-		unsigned char cantidadCartas;
-		unsigned char cartas[CARTASBARAJA];
+		int cantidadCartas;
+		int cartas[CARTASBARAJA];
 
 		arregloCartas() : cantidadCartas(0)
 		{
 		}
 
-		void ponerCarta(unsigned char carta)
+		void ponerCarta(int carta)
 		{
 			cartas[cantidadCartas] = carta;
 			
@@ -27,7 +27,7 @@ private:
 				cantidadCartas++;
 		}
 
-		unsigned char sacarCarta()
+		int sacarCarta()
 		{
 			if(cantidadCartas)
 			{
@@ -37,14 +37,14 @@ private:
 			return 0;
 		}
 
-		unsigned char ultimaCarta(){
+		int ultimaCarta(){
 			if (cantidadCartas > 0){
 				return cartas[cantidadCartas - 1];
 			}
 			return 0;
 		}
 
-		unsigned char contarCartas(){
+		int contarCartas(){
 			return cantidadCartas;
 		}
 	};
@@ -54,14 +54,14 @@ private:
 	int manosApoyadas = 0;
 public:
 	Maso(int idProyecto, const char *rutaArchivo = "/bin/bash");
-	Maso(int idProyecto, std::vector<unsigned char> cartas, const char *rutaArchivo = "/bin/bash");
-	bool ponerCarta(unsigned char carta);
-	unsigned char sacarCarta();
+	Maso(int idProyecto, std::vector<int> cartas, const char *rutaArchivo = "/bin/bash");
+	bool ponerCarta(int carta);
+	int sacarCarta();
 	void mostrarCartas();
-	void agregarCartas(std::vector<unsigned char> cartas);
+	void agregarCartas(std::vector<int> cartas);
 	bool ponerMano( int cantidadJugadores);
 	int contarCartas();
-	std::vector<unsigned char> robarMaso();
+	std::vector<int> robarMaso();
 	void destruir(){
 		mutex.destruir();
 	}

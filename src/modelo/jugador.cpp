@@ -6,7 +6,6 @@
 #include <HandlerSenial.h>
 #include <signal.h>
 #include <iostream>
-#include <vector>
 #include "jugador.h"
 #include <errno.h>
 #include <string>
@@ -21,7 +20,8 @@ const std::string Jugador::BUENOSDIAS = "Buenos Dias Seniorita";
 const std::string Jugador::BUENASNOCHES = "Buenas Noches Caballero";
 const std::string Jugador::VENIA = "\"Hizo venia\"";
 
-Jugador::Jugador(int numeroJugador, Mesa &mesa) : maso(numeroJugador, RUTAJUGADOR),
+Jugador::Jugador(int numeroJugador, Mesa &mesa, std::vector<int> cartas) :
+										  maso(numeroJugador, cartas, RUTAJUGADOR),
 										  numeroJugador(numeroJugador), mesa(mesa),
 										  inicio(Jugador::ID_SEMAFORO_INICIO),
 										  turnoTermino(Jugador::ID_SEMAFORO_TURNO_TERMINADO)
@@ -73,9 +73,9 @@ void Jugador::jugar()
         	mesa.pedirTurno(numeroJugador);
             decir("Jugando");
             pensar();
-            unsigned char carta = maso.sacarCarta();
-            bool ultimaCarta = maso.contarCartas() == 0;
-            mesa.hacerJugada(numeroJugador + 2, );
+            int carta = maso.sacarCarta();
+            bool ultimaCarta = (maso.contarCartas() == 0);
+            mesa.hacerJugada(carta, ultimaCarta);
 
             mesa.pasarTurno(numeroJugador);
         }catch (Error e){
@@ -119,7 +119,8 @@ void Jugador::ponerMano(){
 	decir("pone mano");
 	if (mesa.ponerMano()){
 		decir("roba cartas");
-		std::vector<unsigned char> robadas = mesa.robarCartas();
+		std::vector<int> robadas = mesa.robarCartas();
+		maso.agregarCartas(robadas);
 		std::string robada = "";
 		for (int i = 0; i < robadas.size(); i++){
 			//TODO robar cartas

@@ -7,6 +7,7 @@
 #include "../core/semaforo.h"
 #include "../core/HandlerEvento.h"
 #include "../handlers/SIGINT_Handler.h"
+#include <vector>
 
 #define MAXIMOTIEMPOTURNO 2
 
@@ -32,7 +33,7 @@ private:
 		return allSignals;
 	}
 public:
-	Jugador(int numeroJugador, Mesa &mesa);
+	Jugador(int numeroJugador, Mesa &mesa, std::vector<int> cartas);
 	~Jugador();
 	void pensar();
 	void jugar();

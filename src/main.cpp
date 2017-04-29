@@ -9,19 +9,24 @@
 #include "handlers/SIGINT_Handler.h"
 #include "excepciones.h"
 #include "modelo/jugador.h"
-
+#include "CartasFactory.h"
+#include<stdlib.h>
+#include<time.h>
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
+	srand(time(NULL));
 	int cantidadJugadores = 5;
 	bool esHijo = false;
 	int i=0;
 
+	std::vector<std::vector<int>> masosRepartidos = CartasFactory::prepararCartas(cantidadJugadores);
 	Semaforo esperarATodosInicializados(Jugador::ID_SEMAFORO_INICIO,cantidadJugadores + 1);
 	Semaforo esperarFinTurno(Jugador::ID_SEMAFORO_TURNO_TERMINADO,0);
 	Mesa mesa(1, cantidadJugadores);
+
 	//creo 7 semaforos, 5 por jugadores, 1 por barrera y 1 por mutex del maso.
 
 	for(i = 0;i < cantidadJugadores && !esHijo;i++)
@@ -29,7 +34,7 @@ int main(int argc, char** argv)
 
 	if(esHijo)
 	{
-		Jugador yo(i, mesa);
+		Jugador yo(i, mesa, masosRepartidos[i]);
 		yo.jugar();
 		yo.destruir();
 		std::cout << "Jugador " << i  << " saliendo" <<std::endl;
