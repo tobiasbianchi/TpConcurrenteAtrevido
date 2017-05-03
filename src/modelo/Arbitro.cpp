@@ -21,9 +21,13 @@ void Arbitro::liberarMaso(){
 
 void Arbitro::contarCartas(){
 	bloquearMaso();
-	for( int i = 0; i < masosJugadores.size(); i++ ){
-		int cartas = masosJugadores.at(i)->invocar()->contarCartas();
-		std::cout << "Jugador " << i+1 << "tiene " << cartas << "cartas" << std::endl;
+	int random = rand() % 100;
+	float percentage = random / 100.0;
+	if (PROBABILIDAD_ARBITRO >= percentage){
+		for( int i = 0; i < masosJugadores.size(); i++ ){
+			int cartas = masosJugadores.at(i)->invocar()->contarCartas();
+			Log::info("Jugador " + std::to_string(i+1) + " tiene " + std::to_string(cartas) + " cartas");
+		}
 	}
 	liberarMaso();
 }

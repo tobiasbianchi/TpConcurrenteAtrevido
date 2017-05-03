@@ -5,6 +5,7 @@
 #include <assert.h>
 
 #include "HandlerEvento.h"
+#include "Log.h"
 
 class SIGINT_Handler : public HandlerEvento {
 	sig_atomic_t wasCalled;

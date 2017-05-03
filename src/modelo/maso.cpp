@@ -37,7 +37,7 @@ void Maso::mostrarCartas()
 	mutex.tomar();
 
 	for(int i=0;i<cartas.cantidadCartas;i++)
-		std::cout << (int)cartas.cartas[i] << std::endl;
+		Log::info("Carta en maso: " + std::to_string(cartas.cartas[i]));
 
 	mutex.liberar();
 }

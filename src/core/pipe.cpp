@@ -11,6 +11,7 @@ Pipe::Pipe() {
 	this->lectura = true;
 
 	if(pipe(this->descriptores) == CODE_ERROR) {
+		Log::error("Creación de pipe");
 		throw Error("Creación de pipe", strerror(errno));
 	}
 
@@ -18,14 +19,16 @@ Pipe::Pipe() {
 
 void Pipe::cerrarFdEscritura() {
 	if(close(this->descriptores[1]) == CODE_ERROR) {
+		Log::error("Cerrando descriptor escritura del pipe");
 		throw Error("Cerrando descriptor escritura del pipe", strerror(errno));
 	}
 }
 
 void Pipe::cerrarFdLectura() {
 	if(close(this->descriptores[0]) == CODE_ERROR) {
-			throw Error("Cerrando descriptor lectura del pipe", strerror(errno));
-		}
+		Log::error("Cerrando descriptor lectura del pipe");		
+		throw Error("Cerrando descriptor lectura del pipe", strerror(errno));
+	}
 }
 
 void Pipe::cerrar() {
@@ -68,6 +71,7 @@ ssize_t Pipe::leer(void* buffer, const int size) {
 		this->setModo(MODO_LECTURA);
 
 		if((bytes = read(getFdLectura(), buffer, size)) == CODE_ERROR) {
+			Log::error("Leyendo del pipe");
 			throw Error("Leyendo del pipe", strerror(errno));
 		}
 	}
@@ -82,6 +86,7 @@ ssize_t Pipe::escribir(const void* buffer, int size) {
 		this->setModo(MODO_ESCRITURA);
 
 		if((bytes = write(getFdEscritura(), buffer, size) == CODE_ERROR)) {
+			Log::error("Escribiendo en el pipe");
 			throw Error("Escribiendo en el pipe", strerror(errno));
 		}
 	}

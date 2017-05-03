@@ -7,6 +7,7 @@
 
 #include "../core/HandlerSenial.h"
 #include "JugadorHandler.h"
+#include "Log.h"
 
 class OnceHandler : public JugadorHandler{
 public:

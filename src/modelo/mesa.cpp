@@ -6,7 +6,9 @@
 #include "jugador.h"
 
 Mesa::Mesa(unsigned char numeroPartida, int cantidadJugadores) : contador(numeroPartida),
-							maso(ID_MASO_GENERAL_COMAPRTIDO, RUTAARCHIVOMESA, ID_MASO_GENERAL_MUTEX, RUTAARCHIVOMESA)
+							maso(ID_MASO_GENERAL_COMAPRTIDO, RUTAARCHIVOMESA, ID_MASO_GENERAL_MUTEX, RUTAARCHIVOMESA),
+							termino(ID_TERMINO_COMPARTIDO,RUTAARCHIVOMESA,false),
+							terminoControl(ID_TERMINO_MUTEX, 1, RUTAARCHIVOMESA)
 {
 	//Como no se pueden copiar semaforos hay que reservar la memoria exacta antes o usar otra estructura contenedora.
 	moderadorTurnos.reserve(cantidadJugadores);
@@ -24,6 +26,14 @@ bool Mesa::pedirTurno(int numeroJugador)
 	moderadorTurnos.at(numeroJugador-1).tomar();
 }
 
+bool Mesa::terminoJuego(){
+	bool temp;
+	terminoControl.tomar();
+	temp = (*(termino.invocar()));
+	terminoControl.liberar();
+	return temp;
+}
+
 void Mesa::hacerEsperarFinTurno(){
 	Semaforo turnoTermino(Jugador::ID_SEMAFORO_TURNO_TERMINADO);
 	for (int j = 0; j < moderadorTurnos.size(); j++){
@@ -31,14 +41,25 @@ void Mesa::hacerEsperarFinTurno(){
 	}
 }
 
-bool Mesa::hacerJugada(int carta, bool ultimaCarta)
+void Mesa::hacerJugada(int carta, bool ultimaCarta)
 {
 	bool repitioUltima = maso.invocar()->ponerCarta(carta);
 
 	if (ultimaCarta){
+		imprimir();
 		std::cout << "gano alguiend" << std::endl;
-		HandlerSenial::getInstancia()->broadcastSignal(SIGINT);
+		terminoControl.tomar();
+		*(termino.invocar()) = true;
+		terminoControl.liberar();
+		Log::info("El jugador gano");
 	}else{
+		Log::info("Tiro carta " + std::to_string(carta));
+
+		//asegurar que tienen que esperar a todas las acciones.. igual no veo porque no se interrumpen..
+		if (repitioUltima && ((int)carta != 7)){
+			hacerEsperarFinTurno();
+		}
+
 		switch (carta){
 			case 10:
 				hacerEsperarFinTurno();
@@ -59,13 +80,11 @@ bool Mesa::hacerJugada(int carta, bool ultimaCarta)
 		}
 
 		if (repitioUltima && ((int)carta != 7)){
-			hacerEsperarFinTurno();
 			HandlerSenial::getInstancia()->broadcastSignal(HandlerSenial::SIG_REPETIDA);
 		}
-	}
 
-	imprimir();
-	return true;
+		imprimir();
+	}
 }
 
 bool Mesa::pasarTurno(int numeroJugador)
@@ -80,7 +99,7 @@ bool Mesa::pasarTurno(int numeroJugador)
 
 void Mesa::imprimir()
 {
-	maso.invocar()->mostrarCartas();		
+	//maso.invocar()->mostrarCartas();		
 }
 
 bool Mesa::ponerMano() {

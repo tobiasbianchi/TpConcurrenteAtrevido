@@ -3,6 +3,7 @@
 
 #include <semaforo.h>
 #include "semaforo.h"
+#include "Log.h"
 
 class Mutex : public Semaforo
 {

@@ -4,6 +4,7 @@
 #include <vector>
 #include <mutex.h>
 #include <iostream>
+#include "Log.h"
 
 #define CARTASBARAJA 48
 

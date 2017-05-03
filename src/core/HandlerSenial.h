@@ -1,6 +1,6 @@
 #ifndef SIGNALHANDLER_H_
 #define SIGNALHANDLER_H_
-
+#include "Log.h"
 #include <signal.h>
 #include <stdio.h>
 #include <memory.h>

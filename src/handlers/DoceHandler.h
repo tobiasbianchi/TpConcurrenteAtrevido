@@ -7,6 +7,7 @@
 
 #include "HandlerSenial.h"
 #include "JugadorHandler.h"
+#include "Log.h"
 
 class DoceHandler : public JugadorHandler {
 public:

@@ -10,7 +10,7 @@
 #include <algorithm>
 #include "HandlerEvento.h"
 #include "../modelo/jugador.h"
-
+#include "Log.h"
 
 class JugadorHandler : public HandlerEvento {
 private:

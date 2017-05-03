@@ -15,22 +15,70 @@
 #include "pipe.h"
 #include "PipesFactory.h"
 #include "Arbitro.h"
+#include <fstream>
+#include <exception>
+
+#define LLAMAR_TP "Llamarl como | .tp 6 debug | .tp debug | .tp |"
 using namespace std;
+typedef struct {
+	bool debug;
+	int jugadores;
+} config;
+
+
+config getConfig(int argc, char** argv){
+	config configuration;
+	configuration.debug = false;
+	configuration.jugadores = 2;
+	if (argc == 2){
+		try{
+			configuration.jugadores = std::stoi(argv[1]);
+		} catch (std::exception e){
+			if (strcmp(argv[1],"debug") == 0){
+				configuration.debug = true;
+			}
+		}
+	} else if (argc == 3){
+		try{
+			int temp = std::stoi(argv[1]);
+			if (temp % 2 == 0 && temp <= 8 && temp >= 2){
+				configuration.jugadores = temp;	
+			} else {
+				std::cout << "La cantidad de jugadores debe ser par entre 2 y 8" << std::endl;
+				exit(1);
+			}
+		} catch (std::exception e){
+			std::cout << LLAMAR_TP;
+			exit(1);
+		}
+		if (strcmp(argv[2],"debug") == 0){
+			configuration.debug = true;
+		}
+	}
+	return configuration;
+
+}
+
+void printConfig(config configuration){
+	std::cout << "Comenzando juego con " << configuration.jugadores <<" jugadores" << std::endl;
+	std::cout << "Debug set to " << configuration.debug << std::endl;
+}
 
 int main(int argc, char** argv)
 {
 	srand(time(NULL));
-	int cantidadJugadores = 5;
-	bool esHijo = false;
-	int i=0;
-
+	config configuration = getConfig(argc,argv);
+	printConfig(configuration);
+	int cantidadJugadores = configuration.jugadores;
+	Log::init("log.txt",configuration.debug);
 	std::vector<Pipe*> allPipes = PipeFactory::getPipes(cantidadJugadores);
 	std::vector<std::vector<int>> masosRepartidos = CartasFactory::prepararCartas(cantidadJugadores);
-	Semaforo esperarATodosInicializados(Jugador::ID_SEMAFORO_INICIO,cantidadJugadores + 1);
+	Semaforo esperarATodosInicializados(Jugador::ID_SEMAFORO_INICIO, cantidadJugadores + 1);
 	Semaforo esperarFinTurno(Jugador::ID_SEMAFORO_TURNO_TERMINADO,0);
 	Mesa mesa(1, cantidadJugadores);
 
-	//creo 7 semaforos, 5 por jugadores, 1 por barrera y 1 por mutex del maso.
+	bool esHijo = false;
+	int i=0;
 
 	for(i = 0;i < cantidadJugadores && !esHijo;i++)
 		esHijo = fork() == 0;
@@ -40,7 +88,7 @@ int main(int argc, char** argv)
 		Jugador yo(i, mesa, masosRepartidos[i - 1], allPipes);
 		yo.jugar();
 		yo.destruir();
-		std::cout << "Jugador " << i  << " saliendo" <<std::endl;
+		Log::info("Jugador " + std::to_string(i) + " saliendo");
 		exit(0);
 	}
 
@@ -57,26 +105,45 @@ int main(int argc, char** argv)
 	esperarATodosInicializados.esperarACero();
 	
 	Arbitro arbitro(cantidadJugadores);
+	ObjetoCompartido<bool> termino(ID_TERMINO_COMPARTIDO,RUTAARCHIVOMESA);
+	Semaforo terminoControl(ID_TERMINO_MUTEX, RUTAARCHIVOMESA);
 
 	while(handler.getWasCalled() != 1)
 	{
-		//system("clear");
-		//mesa.imprimir();
+		bool temp;
+		terminoControl.tomar();
+		temp = *(termino.invocar());
+		terminoControl.liberar();
+		if (temp){
+			break;
+		}
 		arbitro.contarCartas();
-		sleep(4);
 	}
+	
+	std::cout << 1 << std::endl;
 
 	for (int i = 0; i < cantidadJugadores; i++){
 		wait(NULL);
 	}
 
+	std::cout << 2 << std::endl;
+
 	esperarATodosInicializados.destruir();
 	esperarFinTurno.destruir();
 	mesa.destruir();
+	
+	std::cout << 3 << std::endl;
 
 	for (int i = 0; i < allPipes.size(); i++){
 		delete allPipes.at(i);
 	}
-	std::cout << "Arbitro saliendo" <<std::endl;
+
+	std::cout << 4 << std::endl;
+
+	terminoControl.destruir();
+	Log::info("Arbitro saliendo");
+	std::cout << 5 << std::endl;	
+	Log::destroy();
+	std::cout << 6 << std::endl;
 	return 0;
 }

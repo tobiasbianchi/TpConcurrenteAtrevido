@@ -7,6 +7,7 @@
 #include "maso.h"
 #include "semaforo.h"
 #include "definiciones.h"
+#include "Log.h"
 
 class Arbitro
 {

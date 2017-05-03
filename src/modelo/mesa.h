@@ -6,20 +6,24 @@
 #include <semaforo.h>
 #include <vector>
 #include "definiciones.h"
+#include "Log.h"
 
 
 class Mesa
 {
 private:
 	ObjetoCompartido<Maso> maso;
+	ObjetoCompartido<bool> termino;
 	std::vector<Semaforo> moderadorTurnos;
+	Semaforo terminoControl;
 	unsigned int contador;
 	void hacerEsperarFinTurno();
 public:
 	Mesa(unsigned char numeroPartida, int cantidadJugadores);
 	unsigned int idRecurso();
+	bool terminoJuego();
 	bool pedirTurno(int numeroJugador);
-	bool hacerJugada(int carta, bool ultimaCarta);
+	void hacerJugada(int carta, bool ultimaCarta);
 	bool pasarTurno(int numeroJugador);
 	void imprimir();
 	bool ponerMano();

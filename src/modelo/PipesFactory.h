@@ -9,6 +9,8 @@
 #define PIPESFACTORY_H_
 #include <vector>
 #include "pipe.h"
+ #include "Log.h"
+ 
 class PipeFactory{
 public:
 	static std::vector<Pipe*> getPipes(int cantidadJugadores){

@@ -3,6 +3,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
  #include <string.h>
+#include "Log.h"
 
 template<typename T> template<typename ...Argumentos> ObjetoCompartido<T>::ObjetoCompartido(int idObjeto, const char* rutaArchivo, Argumentos... args) : id(0), memoria(NULL)
 {
@@ -53,14 +54,20 @@ template<typename T> ObjetoCompartido<T>::~ObjetoCompartido()
 	if(memoria)
 	{
 		//Agregar destruir objeto;
-		shmdt(memoria);
-		memoria = NULL;
+		if (shmdt(memoria) == -1){
+			throw Error("Error al eliminar memoria",strerror(errno));
+		} else {
+			memoria = NULL;
+		}
+		
 	}
 
 	if(id)
 	{
 		shmctl(id, IPC_RMID, NULL);
 		id = 0;
+	
+		
 	}
 }
 

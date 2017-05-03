@@ -11,7 +11,7 @@
 #include <vector>
 #include "pipe.h"
 #include "objetocompartido.h"
-
+#include "Log.h"
 #include "definiciones.h"
 
 class Jugador
@@ -38,6 +38,7 @@ private:
 
 	void initSignals();
 	void initPipes(std::vector<Pipe*> pipes);
+	void decirDebug(std::string data);
 public:
 	Jugador(int numeroJugador, Mesa &mesa, std::vector<int> cartas, std::vector<Pipe*> pipes);
 	~Jugador();

@@ -8,7 +8,8 @@
 #ifndef CARTASFACTORY_H_
 #define CARTASFACTORY_H_
 #include <vector>
-
+#include "Log.h"
+ 
 class CartasFactory {
 public:
 	CartasFactory();
