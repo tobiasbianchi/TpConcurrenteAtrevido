@@ -29,6 +29,7 @@ Jugador::Jugador(int numeroJugador, Mesa &mesa, std::vector<int> cartas,
 	initSignals();
 	initPipes(pipes);
 
+	decirDebug("Registro pipes y seniales. Esperando a todos inicializados");
     inicio.tomar();
     inicio.esperarACero();
     decirDebug("Inicializado");
@@ -152,7 +153,7 @@ void Jugador::hacerCartaRepetida(){
 }
 
 void Jugador::ponerMano(){
-	Log::info("pone mano");
+	decir("pone mano");
 	if (mesa.ponerMano()){
 		decir("Ultimo en poner mano");
 		std::vector<int> robadas = mesa.robarCartas();
@@ -169,7 +170,6 @@ void Jugador::mostrarseATodos(){
 	const void* data = &numeroJugador;
 	for(int i = 0; i < pipesEscritura.size(); i++){
 		pipesEscritura.at(i)->escribir(data,sizeof(int));
-		decirDebug("se mostro a " + std::to_string(numeroJugador));	
 	}
 	decir("se mostor a todos");
 }
