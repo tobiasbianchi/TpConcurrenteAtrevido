@@ -16,7 +16,7 @@ private:
 	static bool dbg;
 	static struct flock fl;
 	static int fd;
-	static ssize_t writeData(std::string type, std::string data);
+	static void writeData(std::string type, std::string data);
 	static void tomarLock();
 	static void liberarLock();
 public:

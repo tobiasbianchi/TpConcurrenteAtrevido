@@ -42,7 +42,7 @@ config getConfig(int argc, char** argv){
 	} else if (argc == 3){
 		try{
 			int temp = std::stoi(argv[1]);
-			if (temp % 2 == 0 && temp <= 8 && temp >= 2){
+			if (temp % 2 == 0 && temp <= 12 && temp >= 4){
 				configuration.jugadores = temp;	
 			} else {
 				std::cout << "La cantidad de jugadores debe ser par entre 2 y 8" << std::endl;

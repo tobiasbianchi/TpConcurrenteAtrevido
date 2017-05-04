@@ -7,15 +7,18 @@ int Log::fd;
 
 void Log::init(std::string path, bool debug){
 	dbg = debug;
-	path = path;
-	fl.l_type = F_WRLCK;
-    fl.l_whence = SEEK_SET;
-    fl.l_start = 0;
-    fl.l_len = 0;
-    fd = open(  path.c_str(), O_CREAT|O_WRONLY, 0777 );
-    if (fd == -1){
-    	throw Error("Error al crear el lock del log",strerror(errno));
+    path = path;
+    if (debug){
+        fl.l_type = F_WRLCK;
+        fl.l_whence = SEEK_SET;
+        fl.l_start = 0;
+        fl.l_len = 0;
+        fd = open(  path.c_str(), O_CREAT|O_WRONLY, 0777 );
+        if (fd == -1){
+            throw Error("Error al crear el lock del log",strerror(errno));
+        }    
     }
+	
 }
 
 void Log::info(std::string data){
@@ -28,20 +31,20 @@ void Log::error(std::string data){
 }
 
 void Log::debug(std::string data){
-	if (Log::dbg)
-		Log::writeData( DEBUG, data);
+	Log::writeData( DEBUG, data);
 }
 
-ssize_t Log::writeData(std::string type, std::string data){
-	std::string result = type + ":" + data + "\n";
-    Log::tomarLock();
-    lseek(Log::fd,0,SEEK_END );
-    ssize_t wrote = write(Log::fd, static_cast<const void*>(result.c_str()), result.size());
-    Log::liberarLock();
-    if (wrote != result.size()){
-    	throw Error("Error al escribir en archivo de log",strerror(errno));
+void Log::writeData(std::string type, std::string data){
+	if (Log::dbg){
+        std::string result = type + ":" + data + "\n";
+        Log::tomarLock();
+        lseek(Log::fd,0,SEEK_END );
+        ssize_t wrote = write(Log::fd, static_cast<const void*>(result.c_str()), result.size());
+        Log::liberarLock();
+        if (wrote != result.size()){
+            throw Error("Error al escribir en archivo de log",strerror(errno));
+        }
     }
-    return wrote;
 }
 
 void Log::tomarLock () {
