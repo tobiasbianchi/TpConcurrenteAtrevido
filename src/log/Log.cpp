@@ -20,6 +20,7 @@ void Log::init(std::string path, bool debug){
 
 void Log::info(std::string data){
 	Log::writeData( INFO, data);
+    std::cout << data << std::endl;
 }
 
 void Log::error(std::string data){

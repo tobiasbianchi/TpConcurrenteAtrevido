@@ -31,7 +31,7 @@ private:
 	void ponerMano();
 	std::vector<int> getBlockedSignals() {
 		int signals[] = {HandlerSenial::SIGNAL_10,HandlerSenial::SIGNAL_11,HandlerSenial::SIGNAL_12,
-						HandlerSenial::SIGATREVIDO, HandlerSenial::SIG_REPETIDA,SIGINT};
+						HandlerSenial::SIGATREVIDO, HandlerSenial::SIG_REPETIDA};
 		std::vector<int> allSignals(signals, signals + sizeof(signals)/sizeof(int));
 		return allSignals;
 	}
@@ -53,6 +53,9 @@ public:
 	void destruir();
 	void mostrarseATodos();
 	void verATodos();
+	int getNumeroJugador(){
+		return numeroJugador;
+	}
 	static const std::string ATREVIDO;
 	static const std::string BUENOSDIAS;
 	static const std::string BUENASNOCHES;

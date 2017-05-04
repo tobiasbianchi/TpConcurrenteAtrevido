@@ -47,7 +47,6 @@ void Mesa::hacerJugada(int carta, bool ultimaCarta)
 
 	if (ultimaCarta){
 		imprimir();
-		std::cout << "gano alguiend" << std::endl;
 		terminoControl.tomar();
 		*(termino.invocar()) = true;
 		terminoControl.liberar();

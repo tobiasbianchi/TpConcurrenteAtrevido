@@ -8,6 +8,7 @@
 #include "definiciones.h"
 #include "excepciones.h"
 #include <errno.h>
+#include <iostream>
 
 class Log {
 private:

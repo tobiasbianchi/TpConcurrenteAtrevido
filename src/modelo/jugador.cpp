@@ -70,7 +70,6 @@ void Jugador::destruir(){
 	for (int i = 0; i < pipesEscritura.size(); i++){
 		delete pipesEscritura.at(i);
 	}
-	decirDebug("Cerro todos los pipes");
 }
 
 void Jugador::pensar()
@@ -113,6 +112,8 @@ void Jugador::jugar()
         		throw e;
         	}
         }
+
+        //do handle of interruption
 		
 	}
 }

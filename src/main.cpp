@@ -17,6 +17,7 @@
 #include "Arbitro.h"
 #include <fstream>
 #include <exception>
+#include <time.h>
 
 #define LLAMAR_TP "Llamarl como | .tp 6 debug | .tp debug | .tp |"
 using namespace std;
@@ -59,6 +60,26 @@ config getConfig(int argc, char** argv){
 
 }
 
+bool exists_file (const std::string& name) {
+    ifstream f(name.c_str());
+    return f.good();
+}
+std::string newFileName(){
+	std::string base = "Log.";
+	std::string extension = ".txt";
+	time_t timeLong = time(NULL);
+	struct tm* timeNow = localtime(&timeLong);
+	int year = timeNow->tm_year + 1900;
+	int month = timeNow->tm_mon + 1;
+	int day = timeNow->tm_mday;
+	int hour = timeNow->tm_hour;
+	int minute = timeNow->tm_min;
+	int seconds = timeNow->tm_sec;
+	return base + std::to_string(year) + "." +  std::to_string(month) + "."  + std::to_string(day) 
+			+ "." + std::to_string(hour) + ":" + std::to_string(minute) + ":" + std::to_string(seconds)
+			+ extension;
+}
+
 void printConfig(config configuration){
 	std::cout << "Comenzando juego con " << configuration.jugadores <<" jugadores" << std::endl;
 	std::cout << "Debug set to " << configuration.debug << std::endl;
@@ -70,7 +91,7 @@ int main(int argc, char** argv)
 	config configuration = getConfig(argc,argv);
 	printConfig(configuration);
 	int cantidadJugadores = configuration.jugadores;
-	Log::init("log.txt",configuration.debug);
+	Log::init(newFileName(),configuration.debug);
 	std::vector<Pipe*> allPipes = PipeFactory::getPipes(cantidadJugadores);
 	std::vector<std::vector<int>> masosRepartidos = CartasFactory::prepararCartas(cantidadJugadores);
 	Semaforo esperarATodosInicializados(Jugador::ID_SEMAFORO_INICIO, cantidadJugadores + 1);
@@ -119,31 +140,21 @@ int main(int argc, char** argv)
 		}
 		arbitro.contarCartas();
 	}
-	
-	std::cout << 1 << std::endl;
 
 	for (int i = 0; i < cantidadJugadores; i++){
 		wait(NULL);
 	}
 
-	std::cout << 2 << std::endl;
-
 	esperarATodosInicializados.destruir();
 	esperarFinTurno.destruir();
 	mesa.destruir();
-	
-	std::cout << 3 << std::endl;
 
 	for (int i = 0; i < allPipes.size(); i++){
 		delete allPipes.at(i);
 	}
 
-	std::cout << 4 << std::endl;
-
 	terminoControl.destruir();
 	Log::info("Arbitro saliendo");
-	std::cout << 5 << std::endl;	
 	Log::destroy();
-	std::cout << 6 << std::endl;
 	return 0;
 }

@@ -27,7 +27,7 @@ Semaforo::Semaforo(int idProyecto, int cantidadRecursos, const char *rutaArchivo
 //solo obtienene el semaforo, asegurarse de usarlo cuando ya se creo el semaforo
 Semaforo::Semaforo(int idProyecto, const char* rutaArchivo){
 	obtenerSemaforo(idProyecto, rutaArchivo);
-	Log::debug("Semaforo obtenido ,valor actual es " + std::to_string(obtenerValor()));
+	//Log::debug("Semaforo obtenido ,valor actual es " + std::to_string(obtenerValor()));
 }
 
 void Semaforo::obtenerSemaforo(int idProyecto, const char* rutaArchivo){
