@@ -1,2 +1,4 @@
 cmake-build-debug/
 */.idea/workspace.xml
+src/TP
+src/*.txt
