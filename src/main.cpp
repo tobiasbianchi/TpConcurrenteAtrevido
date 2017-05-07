@@ -30,7 +30,7 @@ typedef struct {
 config getConfig(int argc, char** argv){
 	config configuration;
 	configuration.debug = false;
-	configuration.jugadores = 2;
+	configuration.jugadores = 4;
 	if (argc == 2){
 		try{
 			configuration.jugadores = std::stoi(argv[1]);
@@ -138,8 +138,15 @@ int main(int argc, char** argv)
 		if (temp){
 			break;
 		}
+
+		struct timespec nanoTime;
+		nanoTime.tv_sec = 0;
+		nanoTime.tv_nsec = 3;
+
+		nanosleep(&nanoTime,NULL);
 		arbitro.contarCartas();
 	}
+	
 
 	for (int i = 0; i < cantidadJugadores; i++){
 		wait(NULL);
