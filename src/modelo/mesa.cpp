@@ -44,7 +44,7 @@ void Mesa::hacerEsperarFinTurno(){
 void Mesa::hacerJugada(int carta, bool ultimaCarta)
 {
 	bool repitioUltima = maso.invocar()->ponerCarta(carta);
-
+	Log::info("Tiro carta " + std::to_string(carta));
 	if (ultimaCarta){
 		imprimir();
 		terminoControl.tomar();
@@ -52,8 +52,6 @@ void Mesa::hacerJugada(int carta, bool ultimaCarta)
 		terminoControl.liberar();
 		Log::info("El jugador gano");
 	}else{
-		Log::info("Tiro carta " + std::to_string(carta));
-
 		//asegurar que tienen que esperar a todas las acciones.. igual no veo porque no se interrumpen..
 		if (repitioUltima && ((int)carta != 7)){
 			hacerEsperarFinTurno();
