@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -pthread
+CFLAGS = 
 ESTANDAR = -std=gnu++11
 INCLUDES = -I core -I handlers -I modelo -I log
 DEBUG = -g
